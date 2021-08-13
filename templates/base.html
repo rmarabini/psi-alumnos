@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <title>
+         {% block title %} BookShop {% endblock %}
+      </title>
+   </head>
+   <body>
+      {% block header %} 
+      <p>Header goes here</p>
+      <hr>
+      {% endblock %}
+      {% block menu %}
+      <a href="{% url 'home' %}"> Homepage</a>
+      <a href="{% url 'login' %}"> Log In</a>
+      <a href="{% url 'logout' %}"> Log Out</a>
+      <a href="{% url 'signup' %}"> Sign-up</a>
+      <hr>
+      {% endblock %}
+      {% block content %}
+      <!-- main block -->
+      <hr>
+      {% endblock %}
+      {% block footer %} 
+      <hr>
+      <p>Footer goes here</p>
+      {% endblock %}
+   </body>
+</html>
+
