@@ -3,7 +3,10 @@ from decimal import Decimal
 from django.test import TestCase
 from .models import (Author, Book, User, Comment)
 
-
+###################
+# You may modify the following variables
+from library.settings import BASE_DIR
+pathToProject = BASE_DIR
 # PLease do not modify anything below this line
 ###################
 
@@ -36,9 +39,14 @@ class ModelTests(TestCase):
         dictionary are attributes in the object.
         return created object of class Object
         """
+        # check that str function exists
+        self.assertTrue(ObjectClass.__str__ is not object.__str__)
+        # create object
         item = ObjectClass.objects.create(**dictionary)
         for key, value in dictionary.items():
             self.assertEqual(getattr(item, key), value)
+        # execute __str__() so all the code in models.py is checked
+        item.__str__()
         return item
 
     def test01_author(self):
@@ -82,3 +90,4 @@ class ModelTests(TestCase):
         db_name = connection.settings_dict['NAME']
         self.assertEqual(db_name, 'test_psi',
                          msg='this test will fail in heroku\n')
+
