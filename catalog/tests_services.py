@@ -85,24 +85,52 @@ class CatalogServiceTests(ServiceBaseTest):
             response_txt = self.decode(response.content)
             self.assertFalse(response_txt.find(comment.msg) == -1)
 
-    def test03_search(self):
-        searchString = 'wa'
+    def test03_pagination_is_five(self):
+        searchString = 'a'
+        response = self.client1.get(
+            reverse(SEARCH_SERVICE) + '?q=%s' % searchString, follow=True)
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertEqual(len(response.context['book_list']), 5)
+
+    def test04_pagination_get_second_page(self):
+        # Get second page. This will only work if
+        # standard django pagination is used
+        searchString = 'a'
+        response = self.client1.get(
+            reverse(SEARCH_SERVICE) + '?q=%s&page=2' % searchString,
+            follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue('is_paginated' in response.context)
+        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertEqual(len(response.context['book_list']), 5)
+
+    def test05_search(self):
+        """Get all pages with the result of search and check
+        the books are the right ones"""
+        searchString = 'a'
         # there are more efficient ways to do these 3 queries
-        aaBooks = Book.objects.filter(title=searchString)
-        aaAuthor1 = Author.objects.filter(first_name=searchString)
-        aaAuthor2 = Author.objects.filter(last_name=searchString)
+        aaBooks = Book.objects.filter(title__icontains=searchString)
+        aaAuthor1 = Author.objects.filter(first_name__icontains=searchString)
+        aaAuthor2 = Author.objects.filter(last_name__icontains=searchString)
+
         response = self.client1.get(
             reverse(SEARCH_SERVICE) + '?q=%s' % searchString, follow=True)
         response_txt = self.decode(response.content)
+        for i in range(int(response.context['paginator'].num_pages)+1):
+            response = self.client1.get(
+                reverse(SEARCH_SERVICE) + '?q=%s&page=%d' % (searchString, i),
+                follow=True)
+            response_txt += self.decode(response.content)
+
         for book in aaBooks:
-            print("book", book)
             self.assertFalse(response_txt.find(book.title) == -1)
         for author in aaAuthor1:
             for book in author.book_set.all():
-                self.assertTrue(response_txt.find(book.title) == -1)
+                self.assertFalse(response_txt.find(book.title) == -1)
         for author in aaAuthor2:
             for book in author.book_set.all():
-                self.assertTrue(response_txt.find(book.title) == -1)
+                self.assertFalse(response_txt.find(book.title) == -1)
 
 
 
