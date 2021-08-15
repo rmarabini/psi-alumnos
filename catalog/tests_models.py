@@ -90,4 +90,3 @@ class ModelTests(TestCase):
         db_name = connection.settings_dict['NAME']
         self.assertEqual(db_name, 'test_psi',
                          msg='this test will fail in heroku\n')
-

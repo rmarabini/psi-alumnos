@@ -24,6 +24,8 @@ FONTDIR = "/usr/share/fonts/truetype/freefont/FreeMono.ttf"
 # The name of this class is not optional must be Command
 # otherwise manage.py will not process it properly
 #
+
+
 class Command(BaseCommand):
     # helps and arguments shown when command python manage.py help populate
     # is executed.
@@ -68,7 +70,7 @@ class Command(BaseCommand):
     def cover(self, book):
         """create fake cover image.
            This function creates a very basic cover
-           that show (partially), 
+           that show (partially),
            the primary key, title and author name"""
 
         img = Image.new('RGB', (200, 300), color=(73, 109, 137))
@@ -79,7 +81,8 @@ class Command(BaseCommand):
         d = ImageDraw.Draw(img)
         d.text((10, 100), "PK %05d" % book.id, font=fnt, fill=(255, 255, 0))
         d.text((20, 150), book.title[:15], font=fnt, fill=(255, 255, 0))
-        d.text((20, 200), "By %s" % str(book.author.all()[0])[:15], font=fnt, fill=(255, 255, 0))
+        d.text((20, 200), "By %s" % str(
+            book.author.all()[0])[:15], font=fnt, fill=(255, 255, 0))
         img.save(os.path.join(STATIC_PATH, book.path_to_cover_image))
 
     def book(self):

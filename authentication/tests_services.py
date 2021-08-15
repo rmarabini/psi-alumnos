@@ -1,11 +1,14 @@
 # code created by R. Marabini
-import re, glob, os
+import re
+import glob
+import os
 from decimal import Decimal
 
-from django.test import Client, TestCase, TransactionTestCase
+from django.test import Client, TestCase  # , TransactionTestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.test.utils import override_settings
 
 ###################
 # You may modify the following variables
@@ -26,31 +29,13 @@ SERVICE_DEF = {
          "title": 'Log In',
          "pattern": r"Log In"
      },
-#     LOGOUT_SERVICE: {
-#         "title": 'Log Out',
-#         "pattern": r"Log Out"
-#     },
-#     SIGNUP_SERVICE: {
-#         "title": 'Sign up',
-#         "pattern": r"Your password can’t be too similar to your other personal information"
-#     },
-#     PAGE_AFTER_LOGIN: {
-#         "title": 'Home',
-#         "pattern": r"Hi (?P<username>\w+)"
-#     },
-#     PAGE_AFTER_LOGOUT: {
-#         "title": 'Home',
-#         "pattern": r"Hi (?P<username>\w+)"
-#     },
-#     RESET_PASSWORD_SERVICE: {
-#         "title": 'Forgot Your Password?',
-#         "pattern": r"Enter your email address below, and we'll email instructions for setting a new one."
-#     },
 }
 # PLease do not modify anything below this line
 ###################
 
 NUMBERUSERS = 5
+
+
 class ServiceBaseTest(TestCase):
     """The database transaction that is being used by
     django.test.TestCase can be avoided by inheriting
@@ -149,7 +134,6 @@ class LogInOutServiceTests(ServiceBaseTest):
             {"client": self.client1, "user": self.usersList[0]},
             {"client": self.client2, "user": self.usersList[1]}
         ]
-        responseList = []
         # log in from two clients
         for session in sessions:
             session["client"].post(
@@ -183,36 +167,36 @@ class LogInOutServiceTests(ServiceBaseTest):
         # check  user does not exist
         i = NUMBERUSERS
         user = {"username": "user_%d" % i,
-                "password": "pass_%d" % i,
                 "first_name": "name_%d" % i,
                 "last_name": "last_%d" % i,
                 "email": "email_%d@gmail.com" % i,
-                "password" : 'trekingff1',
-                "password1" : 'trekingff1',
-                "password2" : 'trekingff1'}
+                "password": 'trekingff1',
+                "password1": 'trekingff1',
+                "password2": 'trekingff1'}
         self.assertFalse(
             User.objects.filter(username=user["username"]).exists())
         # send signup request
-        response = self.client1.post(
-            reverse(SIGNUP_SERVICE), user, follow=True)
+        self.client1.post(reverse(SIGNUP_SERVICE), user, follow=True)
 
         # login
-        response = self.client1.post(
-            reverse(LOGIN_SERVICE), user, follow=True)
+        self.client1.post(reverse(LOGIN_SERVICE), user, follow=True)
         # print(self.decode(response.content))
         # check user login
         self.assertTrue(self.client1.session.get(USER_SESSION_ID, False))
 
-
-    from django.test.utils import override_settings
-    @override_settings(EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend')
-    # see https://stackoverflow.com/questions/13848938/django-test-framework-with-file-based-email-backend-server/15053970#15053970
+    @override_settings(
+        EMAIL_BACKEND='django.core.mail.backends.filebased.EmailBackend')
+    # see https://stackoverflow.com/questions/13848938/
+    # django-test-framework-with-file-based-email-backend-server/
+    # 15053970#15053970
     def test06_reset_password(self):
         "reset password if password forgotten using email"
         def utils_extract_reset_tokens(full_url):
             "find token in reset_password email"
-            return re.findall(r"/([\w\-]+)",
-                              re.search(r"^http\://.+$", full_url, flags=re.MULTILINE)[0])[3:5]
+            return re.findall(
+                r"/([\w\-]+)",
+                re.search(
+                    r"^http\://.+$", full_url, flags=re.MULTILINE)[0])[3:5]
 
         from django.contrib.auth import authenticate
         # check this user exists
@@ -221,13 +205,13 @@ class LogInOutServiceTests(ServiceBaseTest):
 
         # request reset password
         data = {'email': user.email}
-        response = self.client1.post(
+        self.client1.post(
             reverse(RESET_PASSWORD_SERVICE), data, follow=True)
         # check file with email
         # open last file in directory settings.EMAIL_FILE_PATH
         # and extract tokens
         list_of_files = glob.glob(
-            os.path.join(settings.EMAIL_FILE_PATH, '*.log'))  # * means all if need specific format then *.csv
+            os.path.join(settings.EMAIL_FILE_PATH, '*.log'))
         latest_file = max(list_of_files, key=os.path.getctime)
         f = open(latest_file, "r")
         msg = f.read()
@@ -242,21 +226,24 @@ class LogInOutServiceTests(ServiceBaseTest):
             "new_password2": USER_NEW_PSW
         }
         # ask for reset password form
-        # you can not go supply the new password without calling the empty form first
-        # see https://stackoverflow.com/questions/50415700/unable-to-create-an-integration-test-for-djangos-reset-password-flow
-        response = self.client1.get(reverse(PASSWORD_RESET_CONFIRM_SERVICE,
-                    args=(uidb64, token)), follow=True)
+        # you can not go supply the new password without
+        # calling the empty form first
+        # see
+        # https://stackoverflow.com/questions/50415700/
+        # unable-to-create-an-integration-test-for-djangos-reset-password-flow
+        self.client1.get(reverse(PASSWORD_RESET_CONFIRM_SERVICE,
+                                 args=(uidb64, token)), follow=True)
         # send new password
-        response = self.client1.post(
+        self.client1.post(
             reverse(PASSWORD_RESET_CONFIRM_SERVICE,
                     args=(uidb64, "set-password")),
-                    data,
-                    follow=True)
+            data,
+            follow=True)
         # this authentication (old password) should fail
         user_new1 = authenticate(username=user.username,
                                  password=self.usersList[1]['password'])
         # this authentication (new password) should sucess
         user_new2 = authenticate(username=user.username,
-                                password=USER_NEW_PSW)
+                                 password=USER_NEW_PSW)
         self.assertIsNone(user_new1)
         self.assertEqual(user.username, user_new2.username)

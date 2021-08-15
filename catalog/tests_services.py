@@ -4,8 +4,8 @@ from django.test import Client, TestCase
 from django.urls import reverse
 
 from .management.commands.populate import Command
-from .models import (Book, Author, User, Comment)
-from django.db.models import Q
+from .models import (Book, Author, Comment)
+
 ###################
 # You may modify the following variables
 
@@ -24,6 +24,7 @@ SERVICE_DEF = {DETAIL_SERVICE: {
 # PLease do not modify anything below this line
 ###################
 
+
 class ServiceBaseTest(TestCase):
     def setUp(self):
         self.client1 = self.client
@@ -38,6 +39,7 @@ class ServiceBaseTest(TestCase):
     @classmethod
     def decode(cls, txt):
         return txt.decode("utf-8")
+
 
 class CatalogServiceTests(ServiceBaseTest):
 
@@ -61,7 +63,9 @@ class CatalogServiceTests(ServiceBaseTest):
         # get response with all book title
         # check all books
         for book in books:
-            response = self.client1.get(reverse(DETAIL_SERVICE, kwargs={'slug':book.slug}), follow=True)
+            response = self.client1.get(
+                reverse(DETAIL_SERVICE, kwargs={'slug': book.slug}),
+                follow=True)
             response_txt = self.decode(response.content)
             self.assertFalse(response_txt.find(book.title) == -1)
             self.assertFalse(response_txt.find(str(book.price)) == -1)
@@ -75,11 +79,11 @@ class CatalogServiceTests(ServiceBaseTest):
         # check comments
         comments = Comment.objects.all()
         self.assertEqual(len(comments), self.populate.NUMBERCOMMENTS,
-                           "wrong number of comments")
+                         "wrong number of comments")
         for comment in comments:
             book = comment.book
             response = self.client1.get(reverse(DETAIL_SERVICE,
-                                                kwargs={'slug':book.slug}),
+                                                kwargs={'slug': book.slug}),
                                         follow=True)
             # check comment is in corresponding detail page
             response_txt = self.decode(response.content)
@@ -90,7 +94,7 @@ class CatalogServiceTests(ServiceBaseTest):
         response = self.client1.get(
             reverse(SEARCH_SERVICE) + '?q=%s' % searchString, follow=True)
         self.assertTrue('is_paginated' in response.context)
-        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertTrue(response.context['is_paginated'])
         self.assertEqual(len(response.context['book_list']), 5)
 
     def test04_pagination_get_second_page(self):
@@ -102,7 +106,7 @@ class CatalogServiceTests(ServiceBaseTest):
             follow=True)
         self.assertEqual(response.status_code, 200)
         self.assertTrue('is_paginated' in response.context)
-        self.assertTrue(response.context['is_paginated'] == True)
+        self.assertTrue(response.context['is_paginated'])
         self.assertEqual(len(response.context['book_list']), 5)
 
     def test05_search(self):
@@ -142,6 +146,3 @@ class CatalogServiceTests(ServiceBaseTest):
             reverse(SEARCH_SERVICE) + '?q=%s' % SearchString, follow=True)
         self.assertEqual(response.context['paginator'].count,
                          Response.context['paginator'].count)
-
-
-
