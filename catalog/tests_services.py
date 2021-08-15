@@ -132,6 +132,16 @@ class CatalogServiceTests(ServiceBaseTest):
             for book in author.book_set.all():
                 self.assertFalse(response_txt.find(book.title) == -1)
 
+    def test06_search_case(self):
+        "check that the search is no case sensitive"
+        searchString = 'b'
+        SearchString = 'B'
+        response = self.client1.get(
+            reverse(SEARCH_SERVICE) + '?q=%s' % searchString, follow=True)
+        Response = self.client2.get(
+            reverse(SEARCH_SERVICE) + '?q=%s' % SearchString, follow=True)
+        self.assertEqual(response.context['paginator'].count,
+                         Response.context['paginator'].count)
 
 
 
