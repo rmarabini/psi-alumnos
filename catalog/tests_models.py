@@ -1,13 +1,16 @@
-"created by R. Marabini"
+# created by R. Marabini on mar ago 17 14:11:42 CEST 2021
 from decimal import Decimal
 from django.test import TestCase
-from .models import (Author, Book, User, Comment)
 
 ###################
 # You may modify the following variables
 from library.settings import BASE_DIR
 pathToProject = BASE_DIR
-# PLease do not modify anything below this line
+from .models import Author as Author
+from .models import Book as Book
+from .models import User as User
+from .models import Comment as Comment
+# Please do not modify anything below this line
 ###################
 
 
@@ -90,3 +93,4 @@ class ModelTests(TestCase):
         db_name = connection.settings_dict['NAME']
         self.assertEqual(db_name, 'test_psi',
                          msg='this test will fail in heroku\n')
+
