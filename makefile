@@ -3,6 +3,7 @@ export PGUSER := alumnodb
 export PGPASSWORD := alumnodb
 export PGCLIENTENCODING := LATIN9
 export PGHOST := localhost
+export DJANGOPORT = 8001
 # you must update the value of HEROKUHOST
 export HEROKUHOST := git:remote protected-bastion-43256
 PSQL = psql
@@ -13,7 +14,7 @@ HEROKU = heroku run export SQLITE=1 &
 APP = catalog  orders
 
 server:
-	$(CMD) runserver
+	$(CMD) runserver $(DJANGOPORT)
 
 reset_db: clear_db update_db create_super_user
 
@@ -32,7 +33,12 @@ dbshell:
 
 populate:
 	@echo populate database
+	rm -rf static/covers/*.png
 	python3 ./manage.py populate
+
+static:
+	@echo manage.py collectstatic
+	python3 ./manage.py collectstatic
 
 update_db:
 	$(CMD) makemigrations $(APP)
@@ -47,15 +53,17 @@ clear_update_db:
 	python3 ./manage.py makemigrations $(APP) 
 	python3 ./manage.py migrate
 
-
 test_catalog_datamodel:
-	$(CMD) test catalog.tests_models
+	$(CMD) test catalog.tests_models --keepdb
 
 test_catalog_services:
-	$(CMD) test catalog.tests_services
+	$(CMD) test catalog.tests_services --keepdb
 
 test_authentication_services:
-	$(CMD) test authentication.tests_services
+	$(CMD) test authentication.tests_services --keepdb
+
+test_orders_cart:
+	$(CMD) test orders.tests_cart --keepdb
 
 # other commands that may be useful but require tuning
 #test_heroku:
@@ -73,5 +81,11 @@ test_authentication_services:
 #	heroku login
 #	heroku $HEROKUHOST
 #
-#push_heroku:
-#	git push heroku master
+heroku_push:
+	git push heroku master
+
+heroku_bash:
+	heroku run bash
+
+heroku_dbshell:
+	heroku pg:psql

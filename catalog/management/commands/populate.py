@@ -37,6 +37,18 @@ class Command(BaseCommand):
     # handle is another compulsory name, do not change it"
     # handle function will be executed by 'manage populate'
     def handle(self, *args, **kwargs):
+        # check a variable that is unlikely been set out of heroku
+        # as DYNO to decide which font directory should be used.
+        # Be aware that your available fonts may be different
+        # from the ones defined here
+        if 'DYNO' in os.environ:
+            self.font = \
+                "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
+        else:
+            self.font = \
+                "/usr/share/fonts/truetype/freefont/FreeMono.ttf"
+
+
         self.NUMBERUSERS = 20
         self.NUMBERBOOKS = 30
         self.NUMBERAUTHORS = 5
@@ -50,6 +62,10 @@ class Command(BaseCommand):
         self.author()
         self.book()
         self.comment()
+        # check a variable that is unlikely been set out of heroku
+        # as DYNO to decide which font directory should be used.
+        # Be aware that your available fonts may be different 
+        # from the ones defined here 
 
     def cleanDataBase(self):
         # delete all models stored (clean table)
@@ -76,7 +92,7 @@ class Command(BaseCommand):
         img = Image.new('RGB', (200, 300), color=(73, 109, 137))
         # your font directory may be different
         fnt = ImageFont.truetype(
-            FONTDIR,
+            self.font,
             28, encoding="unic")
         d = ImageDraw.Draw(img)
         d.text((10, 100), "PK %05d" % book.id, font=fnt, fill=(255, 255, 0))
