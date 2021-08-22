@@ -1,18 +1,19 @@
-# code creat4ed by R. Marabini
+# created by R. Marabini on mar ago 17 14:11:42 CEST 2021
 
 from django.test import Client, TestCase
 from django.urls import reverse
 
 from .management.commands.populate import Command
-from .models import (Book, Author, Comment)
 
 ###################
 # You may modify the following variables
+from .models import Author as Author
+from .models import Book as Book
+from .models import Comment as Comment
 
 DETAIL_SERVICE = "detail"
 SEARCH_SERVICE = "search"
 SEARCH_TITLE = "Search"
-
 
 SERVICE_DEF = {DETAIL_SERVICE: {
         "title": "",
@@ -128,13 +129,13 @@ class CatalogServiceTests(ServiceBaseTest):
             response_txt += self.decode(response.content)
 
         for book in aaBooks:
-            self.assertFalse(response_txt.find(book.title) == -1)
+            self.assertIn(book. title, response_txt)
         for author in aaAuthor1:
             for book in author.book_set.all():
-                self.assertFalse(response_txt.find(book.title) == -1)
+                self.assertIn(book.title, response_txt)
         for author in aaAuthor2:
             for book in author.book_set.all():
-                self.assertFalse(response_txt.find(book.title) == -1)
+                self.assertIn(book.title, response_txt)
 
     def test06_search_case(self):
         "check that the search is no case sensitive"

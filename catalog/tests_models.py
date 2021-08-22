@@ -5,11 +5,14 @@ from django.test import TestCase
 ###################
 # You may modify the following variables
 from library.settings import BASE_DIR
+
 pathToProject = BASE_DIR
 from .models import Author as Author
 from .models import Book as Book
 from .models import User as User
 from .models import Comment as Comment
+
+
 # Please do not modify anything below this line
 ###################
 
@@ -17,23 +20,27 @@ from .models import Comment as Comment
 class ModelTests(TestCase):
     """Test that populate  has been saved data properly
        require files XXXX.pkl stored in the same directory that manage.py"""
+
     def setUp(self):
-        self.authorDict = {"first_name": 'Pedro',
-                           "last_name": 'Picapiedra',
-                           }
-        self.bookDict = {"isbn": '1234567890123',
-                         "title": 'title_1',
-                         "price": Decimal(23.32),
-                         "path_to_cover_image": 'kk.jpg',
-                         "number_copies_stock": 23,
-                         "score": 9,
-                         }
-        self.userDict = {"username": 'pmarmol',
-                         "password": 'troncomovil',
-                         "first_name": 'Pablo',
-                         "last_name": 'Marmol',
-                         "email": 'p.marmol@cantera.com',
-                         }
+        self.authorDict = {
+            "first_name": 'Pedro',
+            "last_name": 'Picapiedra',
+        }
+        self.bookDict = {
+            "isbn": '1234567890123',
+            "title": 'title_1',
+            "price": Decimal(23.32),
+            "path_to_cover_image": 'kk.jpg',
+            "number_copies_stock": 23,
+            "score": 9,
+        }
+        self.userDict = {
+            "username": 'pmarmol',
+            "password": 'troncomovil',
+            "first_name": 'Pablo',
+            "last_name": 'Marmol',
+            "email": 'p.marmol@cantera.com',
+        }
 
     def create_check(self, dictionary, ObjectClass):
         """ create an object of the class 'ObjectClass'
@@ -93,4 +100,3 @@ class ModelTests(TestCase):
         db_name = connection.settings_dict['NAME']
         self.assertEqual(db_name, 'test_psi',
                          msg='this test will fail in heroku\n')
-

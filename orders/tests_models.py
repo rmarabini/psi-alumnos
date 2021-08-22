@@ -20,13 +20,14 @@ class ModelTests(TestCase):
         self.populate = Command()
         self.populate.handle()
 
-        self.OrderDict = {"first_name": 'Pedro',
-                          "last_name": 'Picapiedra',
-                          "email": 'p.picapiedra@cantera.com',
-                          "address": 'Rocaplana 34',
-                          "city": 'Piedradura',
-                          "postal_code": '28049',
-                          }
+        self.OrderDict = {
+            "first_name": 'Pedro',
+            "last_name": 'Picapiedra',
+            "email": 'p.picapiedra@cantera.com',
+            "address": 'Rocaplana 34',
+            "city": 'Piedradura',
+            "postal_code": '28049',
+        }
 
         book = Book.objects.first()
         self.OrderItemDict = {
