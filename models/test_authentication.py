@@ -1,4 +1,6 @@
 # code created by R. Marabini
+# lun ago 22 11:14:51 CEST 2022
+
 import re
 from decimal import Decimal
 

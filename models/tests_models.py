@@ -1,4 +1,6 @@
-# created by R. Marabini on mar ago 17 14:11:42 CEST 2021
+# created by R. Marabini on 
+# lun ago 22 11:14:51 CEST 2022
+
 from decimal import Decimal
 from django.test import TestCase
 
