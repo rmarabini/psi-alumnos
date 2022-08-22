@@ -11,102 +11,94 @@
 import os
 
 from django.core.management.base import BaseCommand
-from catalog.models import (Author, Book, Comment)
-from django.contrib.auth.models import User
+from models.models import (Answer, Game, Guess, Participant, Question, Questionnaire, User)
 from faker import Faker
-from decimal import Decimal
-from library.settings import STATIC_PATH
-from PIL import Image, ImageDraw, ImageFont
 
-
-FONTDIR = "/usr/share/fonts/truetype/freefont/FreeMono.ttf"
 
 # The name of this class is not optional must be Command
 # otherwise manage.py will not process it properly
-#
-
-
 class Command(BaseCommand):
     # helps and arguments shown when command python manage.py help populate
     # is executed.
-    help = """populate database
+    help = """populate kahootclone database
            """
-
+    # if you want to pass an argument to the function
+    # uncomment this line
     # def add_arguments(self, parser):
+    #    parser.add_argument('publicId', 
+    #        type=int, 
+    #        help='game the participants will join to')
+    #    parser.add_argument('sleep', 
+    #        type=float, 
+    #        default=2., 
+    #        help='wait this seconds until inserting next participant')
+
+
+    def __init__(self, sneaky=True, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # "if 'DYNO'" allows you to deal with different
+        # behaviour in heroku and locally
+        # That is, we check a variable ('DYNO') 
+        # that is only defined in heroku
+        if 'DYNO' in os.environ:
+            pass
+        else:
+            pass
+
+        self.NUMBERUSERS = 4
+        self.NUMBERQESTIONARIES = 30
+        self.NUMBERQUESTIONS = 100
+        self.NUMBERPARTICIPANTS = 20
+        self.NUMBERANSWERPERQUESTION = 4
+        self.NUMBERGAMES = 4
 
     # handle is another compulsory name, do not change it"
     # handle function will be executed by 'manage populate'
     def handle(self, *args, **kwargs):
-        # check a variable that is unlikely been set out of heroku
-        # as DYNO to decide which font directory should be used.
-        # Be aware that your available fonts may be different
-        # from the ones defined here
-        if 'DYNO' in os.environ:
-            self.font = \
-                "/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf"
-        else:
-            self.font = \
-                "/usr/share/fonts/truetype/freefont/FreeMono.ttf"
+        "this function will be executed by default"
 
-
-        self.NUMBERUSERS = 20
-        self.NUMBERBOOKS = 30
-        self.NUMBERAUTHORS = 5
-        self.MAXAUTHORSPERBOOK = 3
-        self.NUMBERCOMMENTS = self.NUMBERBOOKS * 5
-        self.MAXCOPIESSTOCK = 30
         self.cleanDataBase()   # clean database
         # The faker.Faker() creates and initializes a faker generator,
         self.faker = Faker()
-        self.user()
-        self.author()
-        self.book()
-        self.comment()
-        # check a variable that is unlikely been set out of heroku
-        # as DYNO to decide which font directory should be used.
-        # Be aware that your available fonts may be different 
-        # from the ones defined here 
+        self.user()  # create users
+        self.questionnaire() # create questionaries
+        self.question()  # create questions 
+        self.answer()  # create answers
+        self.game()  # create games
 
     def cleanDataBase(self):
         # delete all models stored (clean table)
         # in database
-        # remove pass and ADD CODE HERE
-        pass
+        # ordering is important
+        # your code goes here...
 
     def user(self):
         " Insert users"
-        # remove pass and ADD CODE HERE
-        pass
+        # create user
+        print("Users")
+        # your code goes here
 
-    def author(self):
-        " Insert authors"
-        # remove pass and ADD CODE HERE
-        pass
+    def questionnaire(self):
+        "insert questionnaires"
+        print("questionnaire")
+        # your code goes here
+        # assign users randomly to the questionnaires
 
-    def cover(self, book):
-        """create fake cover image.
-           This function creates a very basic cover
-           that show (partially),
-           the primary key, title and author name"""
+    def question(self):
+        " insert questions, assign randomly to questionnaires"
+        print("Question")
+        # your code goes here
+        # assign questions randomly to the questionnaires
 
-        img = Image.new('RGB', (200, 300), color=(73, 109, 137))
-        # your font directory may be different
-        fnt = ImageFont.truetype(
-            self.font,
-            28, encoding="unic")
-        d = ImageDraw.Draw(img)
-        d.text((10, 100), "PK %05d" % book.id, font=fnt, fill=(255, 255, 0))
-        d.text((20, 150), book.title[:15], font=fnt, fill=(255, 255, 0))
-        d.text((20, 200), "By %s" % str(
-            book.author.all()[0])[:15], font=fnt, fill=(255, 255, 0))
-        img.save(os.path.join(STATIC_PATH, book.path_to_cover_image))
+    def answer(self):
+        "insert answers, one of them must be "
+        print("Answer")
+        # your code goes here
+        # assign answer randomly to the questions
+        # maximum number of answers per question is four
 
-    def book(self):
-        " Insert books"
-        # remove pass and ADD CODE HERE
-        pass
-
-    def comment(self):
-        " Insert comments"
-        # remove pass and ADD CODE HERE
-        pass
+    def game(self):
+        "insert some games"
+        print("Game")
+        # your code goes here
+        # choose at random the questionnaries
