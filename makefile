@@ -3,7 +3,8 @@ export PGUSER := alumnodb
 export PGPASSWORD := alumnodb
 export PGCLIENTENCODING := LATIN9
 export PGHOST := localhost
-export DJANGOPORT = 8001
+export DJANGOPORT := 8001
+export DEBUG := True
 # you must update the value of HEROKUHOST
 export HEROKUHOST := git:remote protected-bastion-43256
 PSQL = psql
@@ -11,17 +12,31 @@ CMD = python3 manage.py
 HEROKU = heroku run export SQLITE=1 &
 # Add applications to APP variable as they are
 # added to settings.py file
-APP = catalog  orders
+APP = models 
 
-server:
-	$(CMD) runserver $(DJANGOPORT)
 
-reset_db: clear_db update_db create_super_user
-
+# delete and create a new empty database
 clear_db:
 	@echo Clear Database
 	dropdb --if-exists $(PGDATABASE)
 	createdb
+
+# create alumnodb super user
+create_super_user:
+	$(CMD) shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('alumnodb', 'admin@myproject.com', 'alumnodb')"
+
+populate:
+	@echo populate database
+	python3 ./manage.py populate
+
+runserver:
+	$(CMD) runserver $(DJANGOPORT)
+
+update_models:
+	$(CMD) makemigrations $(APP)
+	$(CMD) migrate
+
+reset_db: clear_db update_models create_super_user
 
 shell:
 	@echo manage.py  shell
@@ -31,39 +46,30 @@ dbshell:
 	@echo manage.py dbshell
 	@$(CMD) dbshell
 
-populate:
+addparticipants:
 	@echo populate database
-	rm -rf static/covers/*.png
-	python3 ./manage.py populate
+	python3 ./manage.py addparticipants
+
+
 
 static:
 	@echo manage.py collectstatic
 	python3 ./manage.py collectstatic
 
-update_db:
-	$(CMD) makemigrations $(APP)
-	$(CMD) migrate
-
-create_super_user:
-	$(CMD) shell -c "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('alumnodb', 'admin@myproject.com', 'alumnodb')"
-
-clear_update_db:
+fully_update_db:
 	@echo del migrations and make migrations and migrate
 	rm -rf */migrations
 	python3 ./manage.py makemigrations $(APP) 
 	python3 ./manage.py migrate
 
-test_catalog_datamodel:
-	$(CMD) test catalog.tests_models --keepdb
+test_authentication:
+	$(CMD) test models.test_authentication --keepdb
 
-test_catalog_services:
-	$(CMD) test catalog.tests_services --keepdb
+test_model:
+	$(CMD) test models.test_models --keepdb
 
-test_authentication_services:
-	$(CMD) test authentication.tests_services --keepdb
-
-test_orders_cart:
-	$(CMD) test orders.tests_cart --keepdb
+test_services:
+	$(CMD) test create.test_services --keepdb
 
 # other commands that may be useful but require tuning
 #test_heroku:
