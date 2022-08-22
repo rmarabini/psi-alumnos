@@ -7,11 +7,19 @@
 #
 # execute python manage.py  populate
 #
-# use module Faker generator to generate data (https://zetcode.com/python/faker/)
+# use module Faker generator to generate data
+# (https://zetcode.com/python/faker/)
 import os
 
 from django.core.management.base import BaseCommand
-from models.models import (Answer, Game, Guess, Participant, Question, Questionnaire, User)
+from models.models import User as User
+from models.models import Questionnaire as Questionnaire
+from models.models import Question as Question
+from models.models import Answer as Answer
+from models.models import Game as Game
+from models.models import Participant as Participant
+from models.models import Guess as Guess
+
 from faker import Faker
 
 
@@ -25,20 +33,19 @@ class Command(BaseCommand):
     # if you want to pass an argument to the function
     # uncomment this line
     # def add_arguments(self, parser):
-    #    parser.add_argument('publicId', 
-    #        type=int, 
+    #    parser.add_argument('publicId',
+    #        type=int,
     #        help='game the participants will join to')
-    #    parser.add_argument('sleep', 
-    #        type=float, 
-    #        default=2., 
+    #    parser.add_argument('sleep',
+    #        type=float,
+    #        default=2.,
     #        help='wait this seconds until inserting next participant')
-
 
     def __init__(self, sneaky=True, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # "if 'DYNO'" allows you to deal with different
         # behaviour in heroku and locally
-        # That is, we check a variable ('DYNO') 
+        # That is, we check a variable ('DYNO')
         # that is only defined in heroku
         if 'DYNO' in os.environ:
             pass
@@ -61,8 +68,8 @@ class Command(BaseCommand):
         # The faker.Faker() creates and initializes a faker generator,
         self.faker = Faker()
         self.user()  # create users
-        self.questionnaire() # create questionaries
-        self.question()  # create questions 
+        self.questionnaire()  # create questionaries
+        self.question()  # create questions
         self.answer()  # create answers
         self.game()  # create games
 
@@ -71,6 +78,7 @@ class Command(BaseCommand):
         # in database
         # ordering is important
         # your code goes here...
+        print("clean Database")
 
     def user(self):
         " Insert users"
