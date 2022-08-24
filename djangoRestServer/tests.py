@@ -1,7 +1,7 @@
-from ast import alias
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-from models.models import Game, Guess, Participant, User, Questionnaire, Question, Answer
+from models.models import (Game, Guess, Participant,
+                           User, Questionnaire, Question, Answer)
 from rest_framework.reverse import reverse
 import json
 from models.constants import QUESTION
@@ -19,8 +19,6 @@ PARTICIPANT_LIST_ERROR = "Authentication credentials were not provided."
 
 # PLease do not modify anything below this line
 ###################
-
-
 
 
 class RestTests(APITestCase):
@@ -91,10 +89,11 @@ class RestTests(APITestCase):
         self.participantDict = {
             'game': self.game,
             'alias': "pepe"}
-        self.participant = Participant.objects.get_or_create(**self.participantDict)[0]
+        self.participant = Participant.objects.get_or_create(
+            **self.participantDict)[0]
 
         # guess
-        self.guessDict={
+        self.guessDict = {
             'participant': self.participant,
             'game': self.game,
             'question': self.question,
@@ -110,95 +109,105 @@ class RestTests(APITestCase):
     def test011_get_game(self):
         """Test get detail of a game given a publicID"""
         # get game information
-        url = reverse(GAME_DETAIL, kwargs={'publicId': self.gameDict['publicId']} )
+        url = reverse(GAME_DETAIL,
+                      kwargs={'publicId': self.gameDict['publicId']})
         response = self.client.get(path=url, format='json')
         req_body = json.loads(self.decode(response.content))
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(req_body['publicId'], self.gameDict['publicId'])
-       
+
     def test012_delete_game(self):
         # try to delete a game
-        url = reverse("game-detail", kwargs={'publicId': self.gameDict['publicId']}) # get retrieve, delete, destroy, put update
+        url = reverse("game-detail",
+                      kwargs={'publicId': self.gameDict['publicId']})
         response = self.client.delete(path=url, format='json')
         # print("response", self.decode(response.content))
         games = Game.objects.filter()
-        self.assertEqual(1, len(games), "It should not be possible to delete a game")
-        self.assertIn(GUESS_DELETE_ERROR, self.decode(response.content) )
+        self.assertEqual(1, len(games),
+                         "It should not be possible to delete a game")
+        self.assertIn(GUESS_DELETE_ERROR, self.decode(response.content))
 
     def test013_update_game(self):
         # try to update a game
-        url = reverse("game-detail", kwargs={'publicId': self.gameDict['publicId']}) # get retrieve, delete, destroy, put update
+        url = reverse("game-detail",
+                      kwargs={'publicId': self.gameDict['publicId']})
         data = {'publicId': 111111}
         response = self.client.put(path=url, data=data, format='json')
         games = Game.objects.filter()
-        self.assertEqual(self.gameDict['publicId'], games.first().publicId, "It should not be possible to update a game")
-        self.assertIn(GUESS_UPDATE_ERROR, self.decode(response.content) )
+        self.assertEqual(self.gameDict['publicId'],
+                         games.first().publicId,
+                         "It should not be possible to update a game")
+        self.assertIn(GUESS_UPDATE_ERROR, self.decode(response.content))
 
     def test014_create_game(self):
         # try to create a game
-        url = reverse("game-list") # add with post, list with get
+        url = reverse("game-list")  # add with post, list with get
         data = {
-            'questionnaire': self.questionnaire.id,
-            'publicId': 222222,
-        }
+               'questionnaire': self.questionnaire.id,
+               'publicId': 222222,
+               }
         response = self.client.post(path=url, data=data, format='json')
-        #print("response", self.decode(response.content))
+        # print("response", self.decode(response.content))
         games = Game.objects.filter()
-        self.assertEqual(1, len(games), "It should not be possible to create a game")
-        self.assertIn(GUESS_CREATE_ERROR, self.decode(response.content) )
+        self.assertEqual(1, len(games),
+                         "It should not be possible to create a game")
+        self.assertIn(GUESS_CREATE_ERROR, self.decode(response.content))
 
     # ==== participant ====
     def test021_add_participant(self):
         url = reverse('participant-list')
-        data={'game': self.gameDict['publicId'],
-              'alias': "luis"}
+        data = {'game': self.gameDict['publicId'],
+                'alias': "luis"}
         response = self.client.post(path=url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         p = Participant.objects.filter(alias='luis').first()
         self.assertEqual(data['alias'], p.alias)
-        #let us add another participants with the same alias
-        data={'game': self.gameDict['publicId'],
-              'alias': "luis"}
+        # let us add another participants with the same alias
+        data = {'game': self.gameDict['publicId'],
+                'alias': "luis"}
         response = self.client.post(path=url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
     def test022_update_participant(self):
         # try to update a participant
-        url = reverse("participant-detail", kwargs={'pk': self.participant.id}) # get retrieve, delete, destroy, put update
+        url = reverse("participant-detail", kwargs={'pk': self.participant.id})
         data = {'alias': 'Maria'}
         response = self.client.put(path=url, data=data, format='json')
         participants = Participant.objects.filter()
-        self.assertEqual(self.participantDict['alias'], participants.first().alias, "It should not be possible to update a participant")
-        self.assertIn(PARTICIPANT_UPDATE_ERROR, self.decode(response.content) )
+        self.assertEqual(self.participantDict['alias'],
+                         participants.first().alias,
+                         "It should not be possible to update a participant")
+        self.assertIn(PARTICIPANT_UPDATE_ERROR, self.decode(response.content))
 
     def test023_delete_participant(self):
         # try to update a participant
-        url = reverse("participant-detail", kwargs={'pk': self.participant.id}) # get retrieve, delete, destroy, put update
+        url = reverse("participant-detail", kwargs={'pk': self.participant.id})
         response = self.client.delete(path=url, format='json')
         participants = Participant.objects.filter()
-        self.assertEqual(1, len(participants), "It should not be possible to delete a participant")
-        self.assertIn(PARTICIPANT_DELETE_ERROR, self.decode(response.content) )
+        self.assertEqual(1, len(participants),
+                         "It should not be possible to delete a participant")
+        self.assertIn(PARTICIPANT_DELETE_ERROR,
+                      self.decode(response.content))
 
     def test024_list_participant(self):
         # try to update a participant
-        url = reverse("participant-detail", kwargs={'pk': self.participant.id}) # get retrieve, delete, destroy, put update
+        url = reverse("participant-detail", kwargs={'pk': self.participant.id})
         # print("url", url)
         response = self.client.get(path=url, format='json')
         # print("response", self.decode(response.content))
-        participants = Participant.objects.filter()
-        self.assertIn(PARTICIPANT_LIST_ERROR, self.decode(response.content) )
+        # participants = Participant.objects.filter()
+        self.assertIn(PARTICIPANT_LIST_ERROR, self.decode(response.content))
 
-# ==== GUESS ===    
+# ==== GUESS ===
     def test_031_add_guess(self):
         url = reverse('guess-list')
         self.game.questionNo = self.game.questionNo + 1
         self.game.save()
-        data={'uuidp': self.participant.uuidP,
-              'game': self.gameDict['publicId'],
-              #'question': self.question2.id,
-              'answer': 0,
-              }
+        data = {'uuidp': self.participant.uuidP,
+                'game': self.gameDict['publicId'],
+                'answer': 0,
+                }
         response = self.client.post(path=url, data=data, format='json')
         self.assertIn(GUESS_ERROR, self.decode(response.content))
         self.game.state = QUESTION
@@ -209,33 +218,35 @@ class RestTests(APITestCase):
         # try to answer again
         response = self.client.post(path=url, data=data, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        guess = Guess.objects.filter().first()
+        # Guess.objects.filter().first()
 
     def test032_delete_guess(self):
         # try to delete a game
-        url = reverse("guess-detail", kwargs={'pk': self.guess.id}) # get retrieve, delete, destroy, put update
+        url = reverse("guess-detail", kwargs={'pk': self.guess.id})
         response = self.client.delete(path=url, format='json')
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         # print("response", self.decode(response.content))
         guesses = Guess.objects.filter()
-        self.assertEqual(1, len(guesses), "It should not be possible to delete a guess")
+        self.assertEqual(1, len(guesses),
+                         "It should not be possible to delete a guess")
         self.assertIn(GUESS_DELETE_ERROR, self.decode(response.content))
 
     def test033_update_guess(self):
         # try to update a game
-        url = reverse("guess-detail", kwargs={'pk': self.guess.id}) # get retrieve, delete, destroy, put update
+        url = reverse("guess-detail", kwargs={'pk': self.guess.id})
         data = {'answer': 2}
         response = self.client.put(path=url, data=data, format='json')
         guesses = Guess.objects.filter()
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
-        self.assertEqual(self.guess.answer.id, guesses.first().answer.id, "It should not be possible to update a guess")
-        self.assertIn(GUESS_UPDATE_ERROR, self.decode(response.content) )
+        self.assertEqual(self.guess.answer.id,
+                         guesses.first().answer.id,
+                         "It should not be possible to update a guess")
+        self.assertIn(GUESS_UPDATE_ERROR, self.decode(response.content))
 
     def test034_detail_guess(self):
         # try to get the guess detail
-        url = reverse("guess-detail", kwargs={'pk': self.guess.id}) # get retrieve, delete, destroy, put update
+        url = reverse("guess-detail", kwargs={'pk': self.guess.id})
         response = self.client.get(path=url, format='json')
         # print("response", self.decode(response.content))
-        guess = Guess.objects.filter().first()
+        # Guess.objects.filter().first()
         self.assertIn(GUESS_DELETE_ERROR, self.decode(response.content))
-
