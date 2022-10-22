@@ -1,8 +1,3 @@
-export PGDATABASE := psi
-export PGUSER := alumnodb
-export PGPASSWORD := alumnodb
-export PGCLIENTENCODING := LATIN9
-export PGHOST := localhost
 export DJANGOPORT := 8001
 export DEBUG := True
 # you must update the value of HEROKUHOST
@@ -13,13 +8,13 @@ HEROKU = heroku run export SQLITE=1 &
 # Add applications to APP variable as they are
 # added to settings.py file
 APP = models 
+export DATABASE_URL = postgres://qgdzyaxe:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@lucky.db.elephantsql.com/qgdzyaxe
 
-
-# delete and create a new empty database
-clear_db:
-	@echo Clear Database
-	dropdb --if-exists $(PGDATABASE)
-	createdb
+## delete and create a new empty database
+#clear_db:
+#	@echo Clear Database
+#	dropdb --if-exists $(PGDATABASE)
+#	createdb
 
 # create alumnodb super user
 create_super_user:
@@ -27,7 +22,7 @@ create_super_user:
 
 populate:
 	@echo populate database
-	python3 ./manage.py populate
+	$(CMD) ./manage.py populate
 
 runserver:
 	$(CMD) runserver $(DJANGOPORT)
@@ -36,7 +31,7 @@ update_models:
 	$(CMD) makemigrations $(APP)
 	$(CMD) migrate
 
-reset_db: clear_db update_models create_super_user
+#reset_db: clear_db update_models create_super_user
 
 shell:
 	@echo manage.py  shell
@@ -71,27 +66,4 @@ test_model:
 test_services:
 	$(CMD) test create.test_services --keepdb
 
-# other commands that may be useful but require tuning
-#test_heroku:
-#	$(HEROKU) $(CMD) test datamodel.tests_models.GameModelTests --keepdb & wait
-#	$(HEROKU) $(CMD) test datamodel.tests_models.MoveModelTests --keepdb & wait
-#	$(HEROKU) $(CMD) test datamodel.tests_models.my_tests --keepdb & wait
-#
-#test_query:
-#	python3 test_query.py
-#
-#test_query_heroku:
-#	$(HEROKU) python3 test_query.py
-#
-#config_heroku:
-#	heroku login
-#	heroku $HEROKUHOST
-#
-heroku_push:
-	git push heroku master
 
-heroku_bash:
-	heroku run bash
-
-heroku_dbshell:
-	heroku pg:psql
