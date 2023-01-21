@@ -140,7 +140,7 @@ class ModelTests(TestCase):
         participantDict = {
             'game': game,
             'alias': 'mialias',
-            'points': 10,
+            'points': 0,
             }
         return self.create_check(participantDict, Participant, check)
 
