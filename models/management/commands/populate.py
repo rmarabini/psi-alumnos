@@ -43,11 +43,11 @@ class Command(BaseCommand):
 
     def __init__(self, sneaky=True, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        # "if 'DYNO'" allows you to deal with different
-        # behaviour in heroku and locally
-        # That is, we check a variable ('DYNO')
+        # "if 'RENDER'" allows you to deal with different
+        # behaviour in render.com and locally
+        # That is, we check a variable ('RENDER')
         # that is only defined in heroku
-        if 'DYNO' in os.environ:
+        if 'RENDER' in os.environ:
             pass
         else:
             pass
@@ -76,7 +76,7 @@ class Command(BaseCommand):
     def cleanDataBase(self):
         # delete all models stored (clean table)
         # in database
-        # ordering is important
+        # order in which data is deleted is important
         # your code goes here...
         print("clean Database")
 
@@ -99,7 +99,7 @@ class Command(BaseCommand):
         # assign questions randomly to the questionnaires
 
     def answer(self):
-        "insert answers, one of them must be "
+        "insert answers, one of them must be the correct one"
         print("Answer")
         # your code goes here
         # assign answer randomly to the questions
