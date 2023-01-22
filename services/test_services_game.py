@@ -144,6 +144,8 @@ class ServiceTests2(ServiceBaseTest):
             user.set_password(self.userDict['password'])
             user.save()
         self.user = user
+        id = self.questionnaire.id
+        args = [str(id)]
         self.checkLogin(GAME_CREATE_SERVICE, 'DO_NOT_CHECK_KEY', args=args)
         response = self.client1.get(
             reverse(GAME_UPDATE_PARTICIPANT_SERVICE), follow=True)
