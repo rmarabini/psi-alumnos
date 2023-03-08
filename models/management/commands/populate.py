@@ -46,7 +46,7 @@ class Command(BaseCommand):
         # "if 'RENDER'" allows you to deal with different
         # behaviour in render.com and locally
         # That is, we check a variable ('RENDER')
-        # that is only defined in heroku
+        # that is only defined in render.com
         if 'RENDER' in os.environ:
             pass
         else:
