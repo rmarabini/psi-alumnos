@@ -12,7 +12,7 @@ urllib3==1.26.9
 whitenoise==5.2.0
 coverage==6.4.3
 Pillow==9.4.0
-# psycopg2-binary contiene binarios compilados que
+# psycopg2-binary contiene ficheros binarios compilados que
 # pueden ser incompatibles con algunos sistemas operativos
 # si surgen problemas de compatibilidad se puede cambiar la
 # "psycopg2-binary==2.9.5" por "psycopg2-binary" 
