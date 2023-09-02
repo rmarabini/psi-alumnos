@@ -116,7 +116,7 @@ class ChessMoveModelTest(TestCase):
             updated_game.board_state,
             'rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1'
         )
-        
+
     def test_010_invalid_chess_move(self):
         # Invalid move (e2 to e7, not a valid pawn move)
         move = ChessMove(
@@ -174,7 +174,8 @@ class ChessMoveModelTest(TestCase):
         )
 
     def test_025_castle(self):
-        fen = "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 1"
+        fen = "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R"\
+              " w KQkq - 0 1"
         self.game.board_state = fen
         self.game.save()
         move = ChessMove(
@@ -188,5 +189,6 @@ class ChessMoveModelTest(TestCase):
         updated_game = ChessGame.objects.get(id=self.game.id)
         self.assertEqual(
             updated_game.board_state,
-            "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 1"
+            "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1"
+            " b kq - 1 1"
         )

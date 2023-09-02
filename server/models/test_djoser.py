@@ -82,8 +82,11 @@ class DjoserEndpointsTest(TestCase):
         }
         response = self.client.post(BASE_URL + 'token/login/', data)
 
-        # Check if the response status code is 400 (Bad Request) or 401 (Unauthorized)
-        self.assertIn(response.status_code, [status.HTTP_400_BAD_REQUEST, status.HTTP_401_UNAUTHORIZED])
+        # Check if the response status code is 400
+        # (Bad Request) or 401 (Unauthorized)
+        self.assertIn(response.status_code,
+                      [status.HTTP_400_BAD_REQUEST,
+                       status.HTTP_401_UNAUTHORIZED])
 
         # Check if the response does not contain the authentication token
         self.assertNotIn('auth_token', response.data)
@@ -92,7 +95,8 @@ class DjoserEndpointsTest(TestCase):
         # Set token-based authentication for the test client
         auth_header = 'Token ' + self.token.key
 
-        # Send a POST request to the "/token/logout/" endpoint with authentication
+        # Send a POST request to the "/token/logout/"
+        # endpoint with authentication
         response = self.client.post(
             BASE_URL + 'token/logout/',
             HTTP_AUTHORIZATION=auth_header)
@@ -106,7 +110,8 @@ class DjoserEndpointsTest(TestCase):
     def test_token_logout_unauthenticated(self):
         # Set token-based authentication for the test client
         auth_header = ''
-        # Send a POST request to the "/token/logout/" endpoint without authentication
+        # Send a POST request to the "/token/logout/"
+        # endpoint without authentication
         response = self.client.post(
             BASE_URL + 'token/logout/',
             HTTP_AUTHORIZATION=auth_header)

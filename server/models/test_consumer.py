@@ -18,7 +18,7 @@ application = URLRouter([
 
 
 class ChessConsumerTests(ChannelsLiveServerTestCase):
-    """Test the chess consumer"""    
+    """Test the chess consumer"""
     def setUp(self):
         self.white_user = User.objects.create_user(
             username='white', password='testpassword')
@@ -60,12 +60,12 @@ class ChessConsumerTests(ChannelsLiveServerTestCase):
             self.white_token_key)
         self.assertEqual(response["type"], "game")
         self.assertEqual(response["message"], "OK")
-        
+
         await communicator.disconnect()
 
     async def test_001_chess_consumer_connect_invalid_token(self):
         """Test that the consumer is able to connect to the websocket
-            but the connection fails because 
+            but the connection fails because
             the token is not valid"""
         self.gameID = self.game.id  # INvalid game ID
 
@@ -73,13 +73,13 @@ class ChessConsumerTests(ChannelsLiveServerTestCase):
             self.gameID,
             'invalid token key')
         self.assertEqual(response["type"], "error")
-        self.assertEqual(response["message"], 
+        self.assertEqual(response["message"],
                          "Invalid token. Connection not authorized.")
         await communicator.disconnect()
 
     async def test_002_chess_consumer_connect_invalid_game(self):
         """Test that the consumer is able to connect to the websocket
-            but the connection fails because 
+            but the connection fails because
             the gameID is not valid"""
         def getGame():
             return ChessGame.objects.filter(id=self.gameID).exists()
@@ -91,13 +91,13 @@ class ChessConsumerTests(ChannelsLiveServerTestCase):
             self.gameID,
             self.white_token_key)
         self.assertEqual(response["type"], "error")
-        self.assertEqual(response["message"], 
+        self.assertEqual(response["message"],
                          f"Invalid game with id {self.gameID}")
         await communicator.disconnect()
 
     async def test_003_chess_consumer_connect_invalid_user(self):
         """Test that the consumer is able to connect to the websocket
-            but the connection fails because 
+            but the connection fails because
             the pair (user,game) is not valid"""
 
         self.gameID = self.game.id  # Valid game ID
@@ -105,7 +105,7 @@ class ChessConsumerTests(ChannelsLiveServerTestCase):
             self.gameID,
             self.black_token_key)
         self.assertEqual(response["type"], "error")
-        self.assertEqual(response["message"], 
+        self.assertEqual(response["message"],
                          f"Invalid game with id {self.gameID}")
         await communicator.disconnect()
 
@@ -130,7 +130,7 @@ class ChessConsumerTests(ChannelsLiveServerTestCase):
 
         def getWhiteUser(move):
             return move.player
-        
+
         self.gameID = self.game2.id  # Valid game ID
 
         response, communicator = await self.connect_and_verify(
@@ -160,7 +160,7 @@ class ChessConsumerTests(ChannelsLiveServerTestCase):
         self.assertEqual(response["promotion"], "")
 
         await communicator.disconnect()
-        
+
         # CHECK DATABASE
         move = await database_sync_to_async(getLastMove)(self.gameID)
         self.assertEqual(move.move_from, "e2")
@@ -223,12 +223,14 @@ class ChessConsumerTests(ChannelsLiveServerTestCase):
             print("Exceptionn", e)
         logging.info(f"response: {response}")
         self.assertEqual(response["type"], "error")
-        self.assertEqual(response["message"], "Error: invalid move (game is not active)")
+        self.assertEqual(
+            response["message"],
+            "Error: invalid move (game is not active)")
         await communicator.disconnect()
 
     async def test_020_scholar_mate(self):
         # scholar's check
-        moves = [ # from to promoted_piece
+        moves = [  # from to promoted_piece
             ["e2", "e4", ""],
             ["e7", "e5", ""],
             ["d1", "f3", ""],
@@ -279,7 +281,7 @@ class ChessConsumerTests(ChannelsLiveServerTestCase):
         as it should
         """
 
-        # When you try to run game.save() 
+        # When you try to run game.save()
         # you are trying to commit a transaction.
         # And this cannot happen until the end of the
         # test because TestCase wraps each test within
@@ -399,8 +401,8 @@ class ChessConsumerTests(ChannelsLiveServerTestCase):
         }
         # Send the move data
         await communicator.send_json_to(move_data)
- 
+
         # Ensure no message is received after trying to send
         import asyncio
-        with self.assertRaises(asyncio.TimeoutError):  # Use the appropriate exception
-            response = await communicator.receive_json_from()
+        with self.assertRaises(asyncio.TimeoutError):
+            _ = await communicator.receive_json_from()
