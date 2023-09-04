@@ -5,9 +5,13 @@ describe('Login Test', () => {
     it('Displays an error message for incorrect credentials', () => {
       // clean database
       cy.delete_game()
+      // print baseUrl in the console 
+      // just to check that is there
+
+      console.log("baseURl", Cypress.config().baseUrl)
       cy.visit('/sign-up');
 
-      // Fill in the login form with incorrect credentials
+      // create player
       cy.get('[data-cy=username]' ).type(Cypress.env('username'));
       cy.get('[data-cy=password1]').type(Cypress.env('password'));
       cy.get('[data-cy=password2]').type(Cypress.env('password'));

@@ -2,7 +2,7 @@
 // 
 describe('Play a full game', () => {
     // you may need to modify this value
-    const TEST_BOARD_SIZE_PX = 590;
+    const TEST_BOARD_SIZE_PX = Cypress.env('TEST_BOARD_SIZE_PX');
     // nothing to change below this line
 
     // Define The moves of the game

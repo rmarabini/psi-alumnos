@@ -39,7 +39,7 @@ describe('Login Test', () => {
     // that creates the game is protected
     // againts anonymous users
     it('Try to create a game before login', () => {
-      cy.exec("./create_user.sh");
+      // cy.exec("./create_user.sh");
       cy.visit("/creategame"); //go to open game
       cy.get('#selectGame').select("Join any game")
       cy.get('[data-cy=createGame-button]').click();
