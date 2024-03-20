@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .models import Player
+from models.models import Player
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 
