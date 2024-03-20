@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
-from models.models import Player, ChessGame, chessMove
+from models.models import Player, ChessGame, ChessMove
 
 User = get_user_model()
 
