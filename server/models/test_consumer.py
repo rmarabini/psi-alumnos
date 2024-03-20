@@ -1,6 +1,6 @@
 from channels.testing import ChannelsLiveServerTestCase
 from rest_framework.authtoken.models import Token
-from .consumers import ChessConsumer
+from models.consumers import ChessConsumer
 from models.models import ChessGame, ChessMove
 from django.contrib.auth import get_user_model
 from channels.testing import WebsocketCommunicator
