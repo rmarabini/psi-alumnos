@@ -2,7 +2,7 @@ from django.test import TestCase
 from rest_framework.test import APIClient
 from rest_framework import status
 # from django.contrib.auth.models import User
-from .models import ChessGame
+from models.models import ChessGame
 from django.contrib.auth import get_user_model
 
 # you may modify the following lines
