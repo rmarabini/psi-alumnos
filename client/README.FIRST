@@ -12,7 +12,7 @@ Tenéis que actualizar estos valores para que sean correctos en vuestro sistema.
 
           cy.get('[data-cy=username]').type(Cypress.env('username'));
 
-  buscará la etiqueta "data-cy=username" en vuestro fichero login.vue y escribirá en el campo asociado 
+  buscará el atributo "data-cy=username" en vuestro fichero login.vue y escribirá en el campo asociado 
 el valor de la variable "username" definido en "cypress.config.js"
 
 Así pues Login.vue debera tener un campo input (donde se teclea el username) parecido a
