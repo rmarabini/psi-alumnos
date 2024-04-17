@@ -17,9 +17,7 @@ el valor de la variable "username" definido en "cypress.config.js"
 Así pues Login.vue debera tener un campo input (donde se teclea el username) parecido a
 
                                            <input name="username" 
-                                                   v-model="username" 
                                                    ... 
                                                    data-cy="username"
                                                    ... />
-                                        </div>
 esto es, conteniendo el atributo 'data-cy="username"'
