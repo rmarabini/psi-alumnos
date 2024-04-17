@@ -7,7 +7,7 @@ Tenéis que actualizar estos valores para que sean correctos en vuestro sistema.
 
     const PYTHON = "/home/.../bin/python"
     const MANAGE = "/home/.../manage.py"
-3) Los test hacen un uso intensivo de las etiquetas "data-cy". Por ejemplo, el test test_login.cy.js la linea
+3) Los test hacen un uso intensivo de las etiquetas "data-cy". Por ejemplo, en test test_login.cy.js la linea
 
           cy.get('[data-cy=username]').type(Cypress.env('username'));
 
