@@ -1,6 +1,6 @@
 Para ejecutar los test debes tener en cuenta las siguientes consideraciones:
 
-0) El contenido de este repositorio debe copiarse en la raíz de vuestro proejcto vue.
+0) El contenido de este repositorio debe copiarse en la raíz de vuestro projecto vue.
 1) En el fichero cypress.config.js estan definidas varias variables como "username" y "password" que se usan en los diversos test así como
 la variable baseUrl que contiene la dirección donde se encuentra el servidor de vue (normalmente http://localhost:5173)
 2) En el fichero "cypress/support/commands.js" hay diversas funciones auxiliares que necesitan saber que versión de python deben usar y donde está manage.py. 
