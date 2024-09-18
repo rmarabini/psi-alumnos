@@ -1,4 +1,4 @@
-from django.test import TestCase, TransactionTestCase
+from django.test import TransactionTestCase, tag
 from chess_models.models import Player, Tournament, Round, Game
 from chess_models.models import (
     LichessAPIError, TournamentType, Scores)
@@ -30,6 +30,7 @@ class GameModelTest(TransactionTestCase):
         self.players.append(player)
         tournament.save()
 
+    @tag("continua")
     def test_001_game_str_method(self):
         "create a game and test str method"
         game = Game.objects.create(round=self.round)
@@ -46,6 +47,7 @@ class GameModelTest(TransactionTestCase):
             )
 
     # ROB: get_lichess_game_result needed
+    @tag("continua")
     def test_002_game_get_result_from_lichess(self):
         """given a lichess game_id get the result of the game
         This function should connect to the lichess API
@@ -59,6 +61,7 @@ class GameModelTest(TransactionTestCase):
         self.assertEqual(black, self.players[1].lichess_username)
         self.assertEqual(winner.lower(), Scores.WHITE.value)
 
+    @tag("continua")
     def test_003_game_get_result_from_lichess_invalid_game_id(self):
         """given a lichess game_id get the result of the game.
         gameID points to a game that has not been 
@@ -72,6 +75,7 @@ class GameModelTest(TransactionTestCase):
         with self.assertRaises(LichessAPIError):
             winner, white, black = game.get_lichess_game_result('kJfWZqUL')
 
+    @tag("continua")
     def test_004_game_get_result_from_lichess_invalid_game_id(self):
         """given a lichess game_id get the result of the game.
         gameID is invalid thererefore a exception occurs.

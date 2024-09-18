@@ -1,8 +1,9 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 from chess_models.models import Tournament, Round
 
 
 class RoundModelTest(TestCase):
+    @tag("continua")
     def test_001_round_tournament(self):
         "assign round to tournament"
         tournament_name = 'tournament_01'

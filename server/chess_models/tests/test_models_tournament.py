@@ -1,4 +1,4 @@
-from django.test import TransactionTestCase
+from django.test import TransactionTestCase, tag
 from chess_models.models import Player, Referee, Tournament, Game, Round
 from chess_models.models import (TournamentSpeed, getGamesCount,
                                  TournamentType, TournamentBoardType,
@@ -15,6 +15,7 @@ class TournamentModelTest(TransactionTestCase):
         pass
         # reset_sequences()
 
+    @tag("continua")
     def test_001_tournament_str_method(self):
         "create a tournament "
         tournament_name = 'tournament_01'
@@ -22,6 +23,7 @@ class TournamentModelTest(TransactionTestCase):
             name=tournament_name)
         self.assertEqual(str(tournament), tournament_name)
 
+    @tag("continua")
     def test_002_tournament_add_players(self):
         """add players to tournament,
            check tournament.players is a manytomany field
@@ -40,6 +42,7 @@ class TournamentModelTest(TransactionTestCase):
         self.assertEqual(tournament.getPlayersCount(),
                          len(lichess_usernames_6))
 
+    @tag("continua")
     def test_003_tournament_add_referee(self):
         "add referee to tournament"
         tournament_name = 'tournament_01'
@@ -50,6 +53,7 @@ class TournamentModelTest(TransactionTestCase):
         tournament.referee = referee
         self.assertEqual(tournament.referee, referee)
 
+    @tag("continua")
     def test_0030_RankingSystemClass(self):
         "create a RankingSystemClass"
         rankingSystem = RankingSystem.BUCHHOLZ
@@ -57,6 +61,7 @@ class TournamentModelTest(TransactionTestCase):
             value=rankingSystem)
         self.assertEqual(rankingSystemClass.value, rankingSystem)
 
+    @tag("continua")
     def test_0035_tournament_rankingList(self):
         """add rankingList to tournament
         Ranking are saved as manytomany field in the model Tournament
@@ -73,6 +78,7 @@ class TournamentModelTest(TransactionTestCase):
         self.assertTrue(rankingSystem1 in rankingSystemList)
         self.assertTrue(rankingSystem2 in rankingSystemList)
 
+    @tag("continua")
     def test_004_tournament_number_of_players(self):
         "check function getPlayersCount,  number of "
         "players in tournament"
@@ -89,6 +95,7 @@ class TournamentModelTest(TransactionTestCase):
                          len(lichess_usernames_6))
 
     # ROB: getPlayers: needed
+    @tag("suiza")
     def test_005_getSortedPlayers(self):
         """check function getSortedPlayers that
         returns a sorted  list of players. The sorted is done by
@@ -113,6 +120,7 @@ class TournamentModelTest(TransactionTestCase):
             ranting = player.lichess_rating_rapid
 
     # ROB  create_round method needed
+    @tag("continua")
     def test_006_tournament_create_round_even(self):
         """create games for a round robin tournament
         Solution for 6 players:
@@ -154,6 +162,7 @@ class TournamentModelTest(TransactionTestCase):
     # Code written by studends in continuos mode 
     # does not need to satisfy the following tests
     # unless it is a resit
+    @tag("odd")
     def test_007_tournament_create_round_odd(self):
         """create games for a round robin tournament
         Solution for 5 players:
@@ -206,6 +215,7 @@ class TournamentModelTest(TransactionTestCase):
                         self.assertEqual(
                             game.white, participants[solution[i][j][0]-1])
 
+    @tag("double")
     def test_0075_tournament_create_double_round_same_dayeven(self):
         """create games for a double round same day robin tournament
         Solution for 6 players:
@@ -254,6 +264,7 @@ class TournamentModelTest(TransactionTestCase):
                 self.assertEqual(game.white, participants[solution[i][j][0]-1])
                 self.assertEqual(game.black, participants[solution[i][j][1]-1])
 
+    @tag("double")
     def test_0076_tournament_create_round_odd(self):
         """create games for a double round robin same day tournament
         Solution for 5 players:
@@ -316,6 +327,7 @@ class TournamentModelTest(TransactionTestCase):
                         self.assertEqual(
                             game.white, participants[solution[i][j][0]-1])
 
+    @tag("double")
     def test_008_tournament_create_double_round_even(self):
         """create games for a round robin tournament
         Solution for 8 players:
@@ -374,6 +386,7 @@ class TournamentModelTest(TransactionTestCase):
                 self.assertEqual(game.white, participants[solution[i][j][0]-1])
                 self.assertEqual(game.black, participants[solution[i][j][1]-1])
 
+    @tag("suiza")
     def test_010_tournament_create_swiss_tournament_round_0(self):
         """create games for a swiss tournament with 16 players
         first round. No half byes or unplayed byes"""
@@ -427,6 +440,7 @@ class TournamentModelTest(TransactionTestCase):
                  Player.objects.get(id=solution[i][1])}
                  )
 
+    @tag("suiza")
     def test_011_tournament_create_swiss_tournament_round_0_with_manual_bye(
             self):
         """create games for a swiss tournament with 16 players
@@ -487,6 +501,7 @@ class TournamentModelTest(TransactionTestCase):
                 {white, black}
                  )
 
+    @tag("suiza")
     def test_012_tournament_create_swiss_tournament_round_0_with_umplayed_bye(
             self):
         """create games for a swiss tournament with 15 players
@@ -559,6 +574,7 @@ class TournamentModelTest(TransactionTestCase):
                 finished=False),
             len(solution))
 
+    @tag("suiza")
     def test_013_tournament_create_swiss_tournament_round_1(self):
         # Create players
         playerD1 = {}

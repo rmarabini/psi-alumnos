@@ -226,6 +226,7 @@ ScoresFromValue = {
 
 VERYLARGENUMBER = 100000000
 
+# valid lichess users used mainly for testing
 LICHESS_USERS = [
     "ertopo",
     "soria49",

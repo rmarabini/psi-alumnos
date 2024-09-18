@@ -1,4 +1,4 @@
-from django.test import TransactionTestCase
+from django.test import TransactionTestCase, tag
 from chess_models.models import Tournament, Round, Game
 # from chess_models.models import (
 #    LichessAPIError, TournamentType, Scores)
@@ -25,6 +25,7 @@ class TournamentModelTestExtension(TransactionTestCase):
                         'Maria', 'Nick (W)', 'Opal', 'Paul', 'Reine',
                         'Stephan']
 
+    @tag("continua")
     def test_009_tournament_getPlayers(self):
         """Test function getPlayers that returns a list of
         players"""
@@ -59,12 +60,12 @@ class TournamentModelTestExtension(TransactionTestCase):
         tournament.tournament_type = TournamentType.SWISS
         tournament.board_type = TournamentBoardType.OTB
         # clean tournament ranking list
-        tournament.cleanRankingList()
+        tournament.cleanRankingList()  # ROB
         tournament.save()
         # No ranking system defined
         # tournament.addToRankingList(RankingSystem.PLAIN_SCORE.value)
         # assign the rating to the players
-        playersList = tournament.getPlayers()
+        playersList = tournament.getPlayers()  # ROB
         for player in playersList:
             player.fide_rating_classical = resultsDict[player.name][0]
             player.save()
@@ -74,13 +75,14 @@ class TournamentModelTestExtension(TransactionTestCase):
             self.assertEqual(playerV['rank'], resultsDict[playerK.name][0])
         self.assertEqual(len(playersList), len(resultsDict))
 
-        playersList = getRanking(tournament)
+        playersList = getRanking(tournament)  # get ranking
         # print("user (id) rank PS", flush=True)
         for playerK, playerV in playersList.items():
             # print(playerK.name, f"({playerK.id})", playerV['rank'], playerV['PS'], flush=True)
             self.assertEqual(playerV['rank'], resultsDict[playerK.name][0])
         self.assertEqual(len(playersList), len(resultsDict))
 
+    @tag("continua")
     def test_010_tournament_getPoints(self):
         """Test function getPoints that returns a list of
         players and their score. win=1 pt, draw=0.5 pt, loss=0 pt.
@@ -111,11 +113,12 @@ class TournamentModelTestExtension(TransactionTestCase):
         score = RankingSystem.PLAIN_SCORE
         tournament_name = 'tie-breaking exercises swiss'
         tournament = Tournament.objects.get(name=tournament_name)
-        tournament.addToRankingList(RankingSystem.PLAIN_SCORE.value)
-        playersList = getScores(tournament)
+        tournament.addToRankingList(RankingSystem.PLAIN_SCORE.value)  # ROB
+        playersList = getScores(tournament)  #  ROB
         for player, points in playersList.items():
             self.assertEqual(points[score], results[player.name][0])
         playersList = getRanking(tournament)
+        # print("PlayerList", playersList, flush=True)
         for i, (playerK, playerV) in enumerate(playersList.items()):
             # print(f"{i+1:02d}",
             #       playerK.name,
@@ -124,6 +127,7 @@ class TournamentModelTestExtension(TransactionTestCase):
             self.assertEqual(playerV[score], results[playerK.name][0])
         self.assertEqual(len(playersList), len(results))
 
+    @tag("continua")
     def test_011_tournament_getScores(self):
         """Test function getScores that returns a list of
         players and their score. win=3 pt, draw=2 pt, loss=1 pt
@@ -165,6 +169,7 @@ class TournamentModelTestExtension(TransactionTestCase):
             # self.assertEqual(points['points_buchholt'],
             #                 results[player.name][1])
 
+    @tag("continua")
     def test_012_tournament_getScores(self):
         """Test function getPoints that returns a list of
         players for a robin tournament"""
@@ -189,7 +194,8 @@ class TournamentModelTestExtension(TransactionTestCase):
         for player, points in playersList.items():
             self.assertEqual(points[score], results[player.name])
 
-    def test_013_tournament_getOpponents(self):
+    @tag("suizo")
+    def test_013_tournament_getOpponents(self): # ROB no
         """Test function getPoints that returns a list of
         players"""
         # games between XXXX and [x,y,z,...]
@@ -302,7 +308,7 @@ class TournamentModelTestExtension(TransactionTestCase):
         tournament = Tournament.objects.get(name=tournament_name)
 
         resultsPoints = getScores(tournament)
-        playersList = getOpponents(tournament, resultsPoints)
+        playersList = getOpponents(tournament, resultsPoints)  # get oponents
         for k, v in playersList.items():
             for localRe, remoteRe in zip(v['result'], gameResult[k.name]):
                 # print(localRe, remoteRe, flush=True)
@@ -333,7 +339,8 @@ class TournamentModelTestExtension(TransactionTestCase):
             self.assertEqual(v['colordifference'],
                              colordifference[k.name])
 
-    def test_014_tournament_getAdjustedScores(self):
+    @tag("suizo")
+    def test_014_tournament_getAdjustedScores(self):  # ROB no
         """Test function getPoints that returns a list of
         players"""
         results = {}
@@ -362,14 +369,15 @@ class TournamentModelTestExtension(TransactionTestCase):
 
         resultsPoints = getScores(tournament)
         playersList = getOpponents(tournament, resultsPoints)
-        getAdjustedScoresList = getAdjustedScores(tournament, playersList)
+        getAdjustedScoresList = getAdjustedScores(tournament, playersList)  # ROB
         score = RankingSystem.PLAIN_SCORE
         for k, v in getAdjustedScoresList.items():
             # print(k.name, v[score], v['adjustedScore'])
             self.assertEqual(v[score], results[k.name][0])
             self.assertEqual(v['adjustedScore'], results[k.name][1])
 
-    def test_015_tournament_getBuchholz(self):
+    @tag("suizo")
+    def test_015_tournament_getBuchholz(self):  # no ROB
         """Test function getPoints that returns a list of
         players"""
         results = {}
@@ -414,7 +422,8 @@ class TournamentModelTestExtension(TransactionTestCase):
             self.assertEqual(playerV[buchholz], results[playerK.name][1])
         self.assertEqual(len(playersList), len(results))
 
-    def test_016_tournament_getBuchholzCutMinusOne(self):
+    @tag("suizo")
+    def test_016_tournament_getBuchholzCutMinusOne(self):  # no ROB
         """Test function getPoints that returns a list of
         players"""
         results = {}
@@ -461,7 +470,8 @@ class TournamentModelTestExtension(TransactionTestCase):
             self.assertEqual(playerV[buchholzcut1], results[playerK.name][1])
         self.assertEqual(len(playersList), len(results))
 
-    def test_017_tournament_getMediamBuchholz(self):
+    @tag("suizo")
+    def test_017_tournament_getMediamBuchholz(self):  # no ROB
         """Test function getPoints that returns a list of
         players"""
         results = {}
@@ -511,7 +521,8 @@ class TournamentModelTestExtension(TransactionTestCase):
                                    delta=0.001)
         self.assertEqual(len(playersList), len(results))
 
-    def test_018_tournament_getSonnebornBerger(self):
+    @tag("suizo")
+    def test_018_tournament_getSonnebornBerger(self):  # no ROB
         """Test function getPoints that returns a list of
         players"""
         results = {}
@@ -560,7 +571,8 @@ class TournamentModelTestExtension(TransactionTestCase):
                              results[playerK.name][1])
         self.assertEqual(len(playersList), len(results))
 
-    def test_019_tournament_getBlackWins(self):
+    @tag("continua")
+    def test_019_tournament_getBlackWins(self):  # ROB yes
         """Test function getPoints that returns a list of
         players"""
         results = {}  # score, win, played with blacks
@@ -590,9 +602,12 @@ class TournamentModelTestExtension(TransactionTestCase):
 
         resultsPoints = getScores(tournament)
         winsblackList = getBlackWins(tournament, resultsPoints)
+        # winsblackList = []*len(result)
+        # print("resultsPoints", resultsPoints)
+        # print("winsblackList", winsblackList)
 
         blacktimes = RankingSystem.BLACKTIMES
-        for k, v in winsblackList.items():
+        for k, v in resultsPoints.items():
             # print(k, v)
             self.assertEqual(v[blacktimes],
                              results[k.name][2])
@@ -611,7 +626,7 @@ class TournamentModelTestExtension(TransactionTestCase):
         for k, v in winsblackList.items():
             # print(k, v)
             self.assertEqual(v[wins],
-                             results[k.name][1])
+                             results[k.name][1])  # what [1] is here
         playersList = getRanking(tournament)
         # buchholz = RankingSystem.BUCHHOLZ
         for i, (playerK, playerV) in enumerate(playersList.items()):
@@ -622,7 +637,8 @@ class TournamentModelTestExtension(TransactionTestCase):
             self.assertEqual(playerV[wins], results[playerK.name][1])
         self.assertEqual(len(playersList), len(results))
 
-    def test_020_check_getRoundCount(self):
+    @tag("continua")
+    def test_020_check_getRoundCount(self):  # ROB yes
         "check function getRoundCount and similars"
         tournament_name = 'tournament_01'
         tournament = Tournament.objects.create(

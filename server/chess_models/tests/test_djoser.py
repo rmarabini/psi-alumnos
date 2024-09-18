@@ -1,5 +1,5 @@
 # djoser need to be installed
-from django.test import TestCase
+from django.test import TestCase, tag
 from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.contrib.auth.models import User
@@ -21,6 +21,7 @@ class DjoserEndpointsTest(TestCase):
         # create token for the test user
         self.token = Token.objects.create(user=self.test_user)
 
+    @tag("continua")
     def test_000_user_creation(self):
         """ Test the '/users/' endpoint (POST request)
         to create a new user. It should fail """
@@ -45,6 +46,7 @@ class DjoserEndpointsTest(TestCase):
         user_exists = User.objects.filter(username=new_username).exists()
         self.assertFalse(user_exists)
 
+    @tag("continua")
     def test_001_users_me_authenticated(self):
         """ Test the '/users/me/' endpoint (GET request)
         to retrieve user details """
@@ -61,6 +63,7 @@ class DjoserEndpointsTest(TestCase):
         # Check if the returned data contains the expected user details
         self.assertEqual(response.data['username'], self.test_user.username)
 
+    @tag("continua")
     def test_002_users_me_unauthenticated(self):
         """ Test the '/users/me/' endpoint (GET request)
         to retrieve user details without authentication
@@ -71,6 +74,7 @@ class DjoserEndpointsTest(TestCase):
         # Check if the response status code is 401 (Unauthorized)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    @tag("continua")
     def test_010_user_login(self):
         """ Test the '/token/login/' endpoint (POST request)
         to login a user """
@@ -85,6 +89,7 @@ class DjoserEndpointsTest(TestCase):
         user = Token.objects.get(key=response.data['auth_token']).user
         self.assertEqual(user, self.test_user)
 
+    @tag("continua")
     def test_011_token_login_invalid_credentials(self):
         """ Test the '/token/login/' endpoint (POST request)
         with invalid login credentials (invalid password) """
@@ -103,6 +108,7 @@ class DjoserEndpointsTest(TestCase):
         # Check if the response does not contain the authentication token
         self.assertNotIn('auth_token', response.data)
 
+    @tag("continua")
     def test_012_token_logout_authenticated(self):
         """ Test the '/token/logout/' endpoint (POST request)
         to logout a user """
@@ -121,6 +127,7 @@ class DjoserEndpointsTest(TestCase):
         # Check if the response status code is 401 (Unauthorized)
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
+    @tag("continua")
     def test_013_token_logout_unauthenticated(self):
         """ Test the '/token/logout/' endpoint (POST request)
         without authentication. It should not logout a user

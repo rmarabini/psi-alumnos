@@ -1,9 +1,11 @@
-from django.test import TestCase
+from django.test import TestCase, tag
 from chess_models.models import Referee
 # import requests
 
 
 class RefereeModelTest(TestCase):
+
+    @tag("continua")
     def test_001_referee(self):
         "create a referee "
         referee_name = 'referee_01'
@@ -13,6 +15,7 @@ class RefereeModelTest(TestCase):
         self.assertEqual(referee.name, referee_name)
         self.assertEqual(referee.refereeNumber, referee_number)
 
+    @tag("continua")
     def test_002_referee_str_method(self):
         "create a referee and print it "
         referee_name = 'referee_01'
