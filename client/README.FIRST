@@ -23,13 +23,3 @@ Así pues Login.vue debera tener un campo input (donde se teclea el username) pa
                                                    data-cy="username"
                                                    ... />
 esto es, conteniendo el atributo 'data-cy="username"'
-4) Para ejecutar los test el componente "TheChessboard" debe incluir entre los parámetros 
-de configuración
-
-trustAllEvents: true,
-
-Nota erudita, el componente vue3-chessboard viene con un sistema de detección de robots, esto es, 
-si el componente detecta que los clicks los está haciendo un robot se niega a procesarlos.
-Este mecanismo contribuye a garantizar que las partidas on-line las juegan dos humanos y no se
-está haciendo trampas en uno de los lados. la propiedad trustAllEvents desactiva esta verificación.
-
