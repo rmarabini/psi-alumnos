@@ -25,7 +25,7 @@ class TournamentModelTestExtension(TransactionTestCase):
                         'Maria', 'Nick (W)', 'Opal', 'Paul', 'Reine',
                         'Stephan']
 
-    @tag("continua")
+    @tag("continuadelete")
     def test_009_tournament_getPlayers(self):
         """Test function getPlayers that returns a list of
         players"""
@@ -82,7 +82,7 @@ class TournamentModelTestExtension(TransactionTestCase):
             self.assertEqual(playerV['rank'], resultsDict[playerK.name][0])
         self.assertEqual(len(playersList), len(resultsDict))
 
-    @tag("continua")
+    @tag("continuadelete")
     def test_010_tournament_getPoints(self):
         """Test function getPoints that returns a list of
         players and their score. win=1 pt, draw=0.5 pt, loss=0 pt.
