@@ -654,7 +654,7 @@ class TournamentModelTestExtension(TransactionTestCase):
         num = tournament.get_latest_round_with_games()
         self.assertIsNone(num)
 
-        game = Game(round=round)  # noqa F841
+        game = Game(round=round, finished=True)  # noqa F841
         game.save()
         self.assertEqual(tournament.getRoundCount(), 1)
         self.assertEqual(tournament.get_number_of_rounds_with_games(), 1)
@@ -662,17 +662,17 @@ class TournamentModelTestExtension(TransactionTestCase):
 
         round2 = Round.objects.create(  # noqa F841
             name='round_02', tournament=tournament)
-        game2 = Game(round=round)  # noqa F841
-        self.assertEqual(tournament.getRoundCount(), 2)
-        self.assertEqual(tournament.get_number_of_rounds_with_games(), 1)
-        self.assertEqual(tournament.get_latest_round_with_games().id, round.id)
-
+        game2 = Game(round=round, finished=True)  # noqa F841
         game2.save()
         self.assertEqual(tournament.getRoundCount(), 2)
         self.assertEqual(tournament.get_number_of_rounds_with_games(), 1)
         self.assertEqual(tournament.get_latest_round_with_games().id, round.id)
 
-        game3 = Game(round=round2)
+        self.assertEqual(tournament.getRoundCount(), 2)
+        self.assertEqual(tournament.get_number_of_rounds_with_games(), 1)
+        self.assertEqual(tournament.get_latest_round_with_games().id, round.id)
+
+        game3 = Game(round=round2, finished=True)
         game3.save()
         self.assertEqual(tournament.getRoundCount(), 2)
         self.assertEqual(tournament.get_number_of_rounds_with_games(), 2)
