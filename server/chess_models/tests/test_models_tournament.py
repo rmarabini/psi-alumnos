@@ -1,6 +1,6 @@
 from django.test import TransactionTestCase, tag
 from chess_models.models import Player, Referee, Tournament, Game, Round
-from chess_models.models import (TournamentSpeed, getGamesCount,
+from chess_models.models import (TournamentSpeed,
                                  TournamentType, TournamentBoardType,
                                  RankingSystem, getRanking, RankingSystemClass)
 from chess_models.models import create_rounds, Scores
