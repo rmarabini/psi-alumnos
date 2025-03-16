@@ -271,7 +271,8 @@ class GameAPITest(TransactionTestCase):
     def test_004_update(self):  # OK
         """Update a game withOUT login in and finished=False.
           It should work """
-        self.client.force_authenticate(user=self.user1)
+        # No need to login first
+        # self.client.force_authenticate(user=self.user1)
         tournament = Tournament.objects.create(name="tournament_1",)
         round = Round.objects.create(name="round_1", tournament=tournament)
         player1 = Player.objects.create(name="player_1")
