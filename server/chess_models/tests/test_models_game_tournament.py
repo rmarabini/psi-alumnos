@@ -3,10 +3,15 @@ from chess_models.models import Tournament, Round, Game
 # from chess_models.models import (
 #    LichessAPIError, TournamentType, Scores)
 from chess_models.models import (getScores, getRanking, getPlayers,
-                                 getOpponents, getBuchholz,
-                                 getAdjustedScores, getBuchholzCutMinusOne,
-                                 getMediamBuchholz, getSonnebornBerger,
                                  getBlackWins)
+try:
+    from chess_models.models import (getMediamBuchholz, getSonnebornBerger,
+                                     getBuchholzCutMinusOne,  getBuchholz,
+                                    getOpponents, getAdjustedScores,
+                                     )
+except ImportError:
+    pass
+
 from chess_models.models.constants import (TournamentSpeed, TournamentType,
                                            TournamentBoardType, RankingSystem)
 
