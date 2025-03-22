@@ -149,7 +149,7 @@ class TournamentModelTest(TransactionTestCase):
             tournament.players.add(player)
             players.append(player)
         # list of participants
-        participants = tournament.getPlayers(sorted=True)
+        participants = tournament.getPlayers(sorted=False)
         create_rounds(tournament)
         rounds = tournament.round_set.all()
         for i, round in enumerate(rounds):
