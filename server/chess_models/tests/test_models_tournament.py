@@ -48,8 +48,12 @@ class TournamentModelTest(TransactionTestCase):
         tournament_name = 'tournament_01'
         tournament = Tournament.objects.create(
             name=tournament_name)
-        referee = Referee.objects.create(
-            name='referee_01', refereeNumber='12345678')
+        try:
+            referee = Referee.objects.create(
+                name=referee_name, refereeNumber=referee_number)
+        except :
+            referee = Referee.objects.create(
+                name=referee_name, referee_number=referee_number)
         tournament.referee = referee
         self.assertEqual(tournament.referee, referee)
 

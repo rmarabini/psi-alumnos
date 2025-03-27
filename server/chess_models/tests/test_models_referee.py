@@ -10,8 +10,12 @@ class RefereeModelTest(TestCase):
         "create a referee "
         referee_name = 'referee_01'
         referee_number = '12345678'
-        referee = Referee.objects.create(
-            name=referee_name, refereeNumber=referee_number)
+        try:
+            referee = Referee.objects.create(
+                name=referee_name, refereeNumber=referee_number)
+        except :
+            referee = Referee.objects.create(
+                name=referee_name, referee_number=referee_number)
         self.assertEqual(referee.name, referee_name)
         self.assertEqual(referee.refereeNumber, referee_number)
 
@@ -20,7 +24,11 @@ class RefereeModelTest(TestCase):
         "create a referee and print it "
         referee_name = 'referee_01'
         referee_number = '12345678'
-        referee = Referee.objects.create(
-            name=referee_name, refereeNumber=referee_number)
+        try:
+            referee = Referee.objects.create(
+                name=referee_name, refereeNumber=referee_number)
+        except :
+            referee = Referee.objects.create(
+                name=referee_name, referee_number=referee_number)
         self.assertEqual(
             referee.__str__(), f'{referee_name} ({referee_number})')
