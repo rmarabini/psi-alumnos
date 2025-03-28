@@ -49,6 +49,7 @@ class TournamentModelTest(TransactionTestCase):
         tournament = Tournament.objects.create(
             name=tournament_name)
         referee_number = '12345678'
+        referee_name = 'referee'
         try:
             referee = Referee.objects.create(
                 name=referee_name, refereeNumber=referee_number)
