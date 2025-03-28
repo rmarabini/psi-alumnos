@@ -66,7 +66,7 @@ class TournamentModelTest(TransactionTestCase):
             value=rankingSystem)
         self.assertEqual(rankingSystemClass.value, rankingSystem)
 
-    @tag("continua")
+    @tag("continuadelete")
     def test_0035_tournament_rankingList(self):
         """add rankingList to tournament
         Ranking are saved as manytomany field in the model Tournament
