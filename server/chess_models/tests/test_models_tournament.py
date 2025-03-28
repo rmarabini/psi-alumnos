@@ -48,6 +48,7 @@ class TournamentModelTest(TransactionTestCase):
         tournament_name = 'tournament_01'
         tournament = Tournament.objects.create(
             name=tournament_name)
+        referee_number = '12345678'
         try:
             referee = Referee.objects.create(
                 name=referee_name, refereeNumber=referee_number)
@@ -77,6 +78,7 @@ class TournamentModelTest(TransactionTestCase):
         rankingSystem2 = RankingSystem.SONNEBORN_BERGER
         tournament.addToRankingList(rankingSystem1)
         tournament.addToRankingList(rankingSystem2)
+        
         rankingSystemList = [r.value for r in tournament.getRankingList()]
         self.assertEqual(tournament.rankingList.count(), 2)
         self.assertTrue(rankingSystem1 in rankingSystemList)
