@@ -224,7 +224,7 @@ class GameAPITest(TransactionTestCase):
             Note: this sgould not work if no login has been made
             """
         self.client.force_authenticate(user=self.user1)
-        tournament = Tournament.objects.create(name="tournament_1",)
+        tournament = Tournament.objects.create(name="tournament_1", administrativeUser=self.user1)
         round = Round.objects.create(name="round_1", tournament=tournament)
         player1 = Player.objects.create(name="player_1")
         player2 = Player.objects.create(name="player_2")
