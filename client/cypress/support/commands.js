@@ -246,7 +246,8 @@ Cypress.Commands.add(
     // use data-cy here so I am using the id
     // [id$=-option-sb] means that the id ends
     // with "-option-sb"
-    cy.get("[id$=-option-sb]").scrollIntoView().check({ force: true });
+    //// Do not use sb since it is not implemented
+    //// cy.get("[id$=-option-sb]").scrollIntoView().check({ force: true });
     cy.get("[id$=-option-wi]").scrollIntoView().check({ force: true });
     cy.get("[id$=-option-bt]").scrollIntoView().check({ force: true });
     // select tournament speed

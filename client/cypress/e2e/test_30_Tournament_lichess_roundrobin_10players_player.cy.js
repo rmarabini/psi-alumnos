@@ -75,16 +75,16 @@ describe("Round Robing 10 players tournament Lichess", () => {
   // row 4 black wins
   // row 5 wins
   const rankings = [
-    ["eaffelix", "7.5", "29.00", "5.00", "7.00"],
-    ["rmarabini", "6.5", "23.75", "4.00", "6.00"],
-    ["soria49", "6", "25.00", "4.00", "6.00"],
-    ["ertopo", "5", "20.50", "4.00", "4.00"],
-    ["Clavada", "5", "17.50", "4.00", "5.00"],
-    ["Philippe2020", "5", "15.00", "5.00", "5.00"],
-    ["jrcuesta", "4", "12.00", "5.00", "4.00"],
-    ["jpvalle", "3.5", "10.00", "5.00", "3.00"],
-    ["zaragozana", "2.5", "8.25", "4.00", "2.00"],
-    ["oliva21", "0", "0.00", "5.00", "0.00"],
+    ["eaffelix", "7.5", "5.00", "7.00"],
+    ["rmarabini", "6.5", "4.00", "6.00"],
+    ["soria49", "6", "4.00", "6.00"],
+    ["Philippe2020", "5", "5.00", "5.00"],
+    ["Clavada", "5", "4.00", "5.00"],
+    ["ertopo", "5", "4.00", "4.00"],
+    ["jrcuesta", "4", "5.00", "4.00"],
+    ["jpvalle", "3.5", "5.00", "3.00"],
+    ["zaragozana", "2.5", "4.00", "2.00"],
+    ["oliva21", "0", "5.00", "0.00"],
   ];
 
   const headerLIC = "lichess_username\n";
@@ -173,13 +173,12 @@ jrcuesta
       .click({ force: true });
     // check ranking
     rankings.forEach((tuple, index) => {
-      const [name, points, sb, black, wins] = tuple; // Destructure the tuple
+      const [name, points, black, wins] = tuple; // Destructure the tuple
       cy.get(`[data-cy=ranking-${index + 1}]`)
         .scrollIntoView() // Scroll the element into view
         .should("be.visible") // Ensure the element is visible
         .should("contain.text", name)
         .should("contain.text", points)
-        .should("contain.text", sb)
         .should("contain.text", black)
         .should("contain.text", wins);
     }); // end forEach

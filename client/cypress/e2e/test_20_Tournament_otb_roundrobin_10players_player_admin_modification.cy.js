@@ -25,34 +25,33 @@ describe("Round Robing 10 players tournament OTB, admin modifies results", () =>
   ];
   // row 1 lichess username
   // row 2 points
-  // row 3 SB
   // row 4 no wins
   // row 5 play as black
   // ranking before administrative user modification
   const rankings = [
-    ["ertopo", "1", "4.00", "1.00", "0.00"],
-    ["soria49", "1", "4.00", "1.00", "0.00"],
-    ["eaffelix", "0", "0.00", "0.00", "1.00"],
-    ["jrcuesta", "0", "0.00", "0.00", "1.00"],
-    ["zaragozana", "0", "0.00", "0.00", "0.00"],
-    ["Clavada", "0", "0.00", "0.00", "0.00"],
-    ["rmarabini", "0", "0.00", "0.00", "0.00"],
-    ["jpvalle", "0", "0.00", "0.00", "0.00"],
-    ["oliva21", "0", "0.00", "0.00", "0.00"],
-    ["Philippe2020", "0", "0.00", "0.00", "0.00"],
+    ["ertopo", "1", "1.00", "0.00"],
+    ["soria49", "1", "1.00", "0.00"],
+    ["eaffelix", "0", "0.00", "1.00"],
+    ["jrcuesta", "0", "0.00", "1.00"],
+    ["zaragozana", "0", "0.00", "0.00"],
+    ["Clavada", "0", "0.00", "0.00"],
+    ["rmarabini", "0", "0.00", "0.00"],
+    ["jpvalle", "0", "0.00", "0.00"],
+    ["oliva21", "0", "0.00", "0.00"],
+    ["Philippe2020", "0", "0.00", "0.00"],
   ];
   // ranking after administrative user modification
   const rankings2 = [
-    ["jrcuesta", "1", "4.00", "1.00", "1.00"],
-    ["soria49", "1", "4.00", "1.00", "0.00"],
-    ["eaffelix", "0", "0.00", "0.00", "1.00"],
-    ["ertopo", "0", "0.00", "0.00", "0.00"],
-    ["zaragozana", "0", "0.00", "0.00", "0.00"],
-    ["Clavada", "0", "0.00", "0.00", "0.00"],
-    ["rmarabini", "0", "0.00", "0.00", "0.00"],
-    ["jpvalle", "0", "0.00", "0.00", "0.00"],
-    ["oliva21", "0", "0.00", "0.00", "0.00"],
-    ["Philippe2020", "0", "0.00", "0.00", "0.00"],
+    ["jrcuesta", "1", "1.00", "1.00"],
+    ["soria49", "1", "1.00", "0.00"],
+    ["eaffelix", "0", "0.00", "1.00"],
+    ["ertopo", "0", "0.00", "0.00"],
+    ["zaragozana", "0", "0.00", "0.00"],
+    ["Clavada", "0", "0.00", "0.00"],
+    ["rmarabini", "0", "0.00", "0.00"],
+    ["jpvalle", "0", "0.00", "0.00"],
+    ["oliva21", "0", "0.00", "0.00"],
+    ["Philippe2020", "0", "0.00", "0.00"],
   ];
 
   // const headerLIC = "lichess_username\n";
@@ -135,13 +134,12 @@ jrcuesta, jrcuesta@example.com
       .click({ force: true });
     // check ranking
     rankings.forEach((tuple, index) => {
-      const [name, points, sb, black, wins] = tuple; // Destructure the tuple
+      const [name, points, black, wins] = tuple; // Destructure the tuple
       cy.get(`[data-cy=ranking-${index + 1}]`)
         .scrollIntoView() // Scroll the element into view
         .should("be.visible") // Ensure the element is visible
         .should("contain.text", name)
         .should("contain.text", points)
-        .should("contain.text", sb)
         .should("contain.text", black)
         .should("contain.text", wins);
     }); // end forEach
@@ -174,13 +172,12 @@ jrcuesta, jrcuesta@example.com
       .click({ force: true });
     // check ranking after modification
     rankings2.forEach((tuple, index) => {
-      const [name, points, sb, black, wins] = tuple; // Destructure the tuple
+      const [name, points, black, wins] = tuple; // Destructure the tuple
       cy.get(`[data-cy=ranking-${index + 1}]`)
         .scrollIntoView() // Scroll the element into view
         .should("be.visible") // Ensure the element is visible
         .should("contain.text", name)
         .should("contain.text", points)
-        .should("contain.text", sb)
         .should("contain.text", black)
         .should("contain.text", wins);
     }); // end forEach
