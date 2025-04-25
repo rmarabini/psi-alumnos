@@ -34,7 +34,7 @@
 // using the Forms
 
 Cypress.Commands.add("logout", () => {
-  cy.visit("/log-out");
+  cy.visit("/logout");
 });
 
 Cypress.Commands.add("login", (username, password) => {
@@ -44,7 +44,7 @@ Cypress.Commands.add("login", (username, password) => {
   // cy.logout();
   cy.add_user("y", "y");
   // go tolog page
-  cy.visit("/log-in");
+  cy.visit("/login");
   cy.wait(1000);
   // Fill in the login form
   // console.log("username", username)
