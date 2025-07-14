@@ -3,7 +3,8 @@ import requests
 from rest_framework import status
 
 # replace by your URL in render.com
-BASE_URL = "https://xxxxxxx.onrender.com/api/v1/"
+BASE_URL = "https://song-54se.onrender.com/api/v1/"
+# BASE_URL = "https://xxxxxxx.onrender.com/api/v1/"
 # BASE_URL = "http://localhost:8000/api/v1/"  # Adjust if your endpoint is different
 
 
