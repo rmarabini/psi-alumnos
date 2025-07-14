@@ -1,18 +1,21 @@
-export DJANGOPORT := 8001
+export DJANGOPORT := 8000
 export DEBUG := True
+export  PGHOST := localhost
+export  PGDATABASE := song
+export  PGUSER := alumnodb
+export  PGPASSWORD := alumnodb
 PSQL = psql
-CMD = python3 manage.py
+CMD = python manage.py
 # Add applications to APP variable as they are
 # added to settings.py file
-APP = models 
-# update neon database
-export DATABASE_URL = postgres://qgdzyaxe:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx@lucky.db.elephantsql.com/qgdzyaxe
+APP = song_models 
+export DATABASE_URL = postgres://alumnodb:alumnodb@localhost/$(PGDATABASE)
 
 ## delete and create a new empty database
-#clear_db:
-#	@echo Clear Database
-#	dropdb --if-exists $(PGDATABASE)
-#	createdb
+clear_db:
+	@echo Clear Database
+	dropdb --if-exists $(PGDATABASE)
+	createdb
 
 # create alumnodb super user
 create_super_user:
@@ -35,14 +38,25 @@ dbshell:
 
 static:
 	@echo manage.py collectstatic
-	python3 ./manage.py collectstatic
+	@$(CMD) collectstatic
 
-fully_update_db:
+update_db: clear_db
 	@echo del migrations and make migrations and migrate
 	rm -rf */migrations
-	python3 ./manage.py makemigrations $(APP) 
-	python3 ./manage.py migrate
+	@$(CMD) makemigrations $(APP) 
+	@$(CMD) migrate
 
-test_model:
-	$(CMD) test models.test_models --keepdb
+populate:
+	@$(CMD) populate
+	
+test_models:
+	$(CMD) test song_models
 
+test_api:
+	$(CMD) test api
+
+flake8:
+	flake8 song_models
+	flake8 api
+conda:
+	conda activate psi_2025
