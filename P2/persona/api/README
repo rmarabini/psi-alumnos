@@ -1,6 +1,6 @@
 This is NOT a django test. Should be executed as:
 
-pytest -v tests.py
+pytest -v test_remote.py
 
 You may need to install pytest with
 
