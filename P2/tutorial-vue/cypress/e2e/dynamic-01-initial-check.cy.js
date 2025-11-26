@@ -1,6 +1,6 @@
 describe('Initial website', () => {
   it('passes', () => {
-    cy.visit('http://localhost:5173')
+    cy.visit('/')
   })
 })
 

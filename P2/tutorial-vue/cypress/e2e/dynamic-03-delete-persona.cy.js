@@ -2,7 +2,7 @@
 
 context('Delete persona', () => {
   beforeEach(() => {
-    cy.visit('http://localhost:5173')
+    cy.visit('/')
   })
 
 
@@ -14,14 +14,14 @@ context('Delete persona', () => {
     it('Add persona OK', () => {
       cy.get('[data-cy=name]').type("Paco_delete")
       cy.get('[data-cy=surname]').type("Land")
-      cy.get('[data-cy=email]').type("paco@land.com")
+      cy.get('[data-cy=email]').type("pacoland@dynamic2.com")
       cy.get('[data-cy=add-button]').click()
+      cy.wait(2000)
       cy.get('div.alert-success')
     })
 
 
     it('Delete persona', () => {
-
       cy.get("table").find("tr").its('length').then(intialLength => {
 
         cy.log('Initial len', intialLength)
