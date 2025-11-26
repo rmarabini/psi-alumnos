@@ -29,24 +29,6 @@
 // fill free to modify the path to python3 and manage.py"
 const PYTHON = "/home/roberto/Docencia/psi/2023_24/venv/bin/python"
 const MANAGE = "/home/roberto/Docencia/psi/2023_24/tutorial/manage.py"
-Cypress.Commands.add('delete_game', () => {
-    var command = " # fill free to modify the path to python3 and manage.py" +
-                "\n" +
-                "export _PYTHON=" + PYTHON + "\n" +
-                "export _MANAGE=" + MANAGE + "\n" +
-                "# nothing to modify before this line\n" +
-                "\n" +
-                "cat <<EOF | ${_PYTHON} ${_MANAGE} shell\n" +
-                "from django.contrib.auth import get_user_model\n" +
-                "from models.models import ChessGame, ChessMove\n" +
-                "User = get_user_model()  # get the currently active user model,\n" +
-                "User.objects.all().delete()\n" +
-                "ChessMove.objects.all().delete()\n" +
-                "ChessGame.objects.all().delete()\n" +
-                "EOF\n"
-    cy.exec(command)
-})
-
 
 Cypress.Commands.add('login', (username, password) => {
     // create test users
@@ -90,28 +72,4 @@ Cypress.Commands.add('login', (username, password) => {
 
     // we should be redirected to /creategame
     cy.url().should('include', '/creategame')
-  })
-
-Cypress.Commands.add('getOffsetBySquare', (boardSizePx, square, orientation) => {
-    const squareSize = boardSizePx / 8;
-    const file = square.charAt(0);
-    //cy.log("file: " + file)
-    let fileMultiplier = {
-      a: 0,
-      b: 1,
-      c: 2,
-      d: 3,
-      e: 4,
-      f: 5,
-      g: 6,
-      h: 7,
-    }[file];
-    let rankMultiplier = 8 - parseInt(square.charAt(1), 10);
-    if (orientation === "b") {
-      fileMultiplier = 7 - fileMultiplier;
-      rankMultiplier = 7 - rankMultiplier;
-    }
-    const x = fileMultiplier * squareSize + squareSize / 2;
-    const y = rankMultiplier * squareSize + squareSize / 2;
-    return {x, y};
   })
