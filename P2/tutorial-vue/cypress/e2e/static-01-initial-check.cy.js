@@ -6,13 +6,13 @@ describe('Initial website', () => {
 
 describe('Formulario-persona', () => {
   it('Body and div', () => {
-    cy.visit('http://localhost:5173')
+    cy.visit('/')
     cy.get('body')
     cy.get('div#formulario-persona')
   })
   
    it('All components', () => {
-    cy.visit('http://localhost:5173')
+    cy.visit('/')
     cy.get('[data-cy=name]')
     cy.get('[data-cy=surname]')
     cy.get('[data-cy=email]')
@@ -23,14 +23,13 @@ describe('Formulario-persona', () => {
 
 describe('Tabla persona', () => {
   it('Table', () => {
-    cy.visit('http://localhost:5173')
+    cy.visit('/')
     cy.get('body')
     cy.get('div#tabla-personas')
   })
   
    it('All components', () => {
-    cy.visit('http://localhost:5173')
+    cy.visit('/')
     cy.get('div#tabla-personas')
   })
-  
 })
