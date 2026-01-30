@@ -14,6 +14,8 @@ from catalog.models import Book, BookInstance, Language, Genre, Author
 
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Permission
+from django.core.exceptions import ObjectDoesNotExist
+import warnings
 
 # Dummy Privileged user for restricted operations: Library Supervisor
 
@@ -21,11 +23,11 @@ DP_USER     = "LibSupervisor"
 DP_PASSWORD = "LibSupervisor_234"
 
 def clean_db():
+    BookInstance.objects.all().delete()
+    Book.objects.all().delete()
     Author.objects.all().delete()
     Genre.objects.all().delete()
     Language.objects.all().delete()
-    BookInstance.objects.all().delete()
-    Book.objects.all().delete()
 
 def populate():
     languages = [
@@ -168,16 +170,23 @@ def populate():
         new_book_instance.save()
 
 def create_dummy_privileged_user():
-    u = User.objects.create_user(username=DP_USER, password=DP_PASSWORD)
+    u, created = User.objects.get_or_create(username=DP_USER)
+    if created:
+        u.set_password(DP_PASSWORD) #This way, the password is encrypted
     u.is_staff = True
-    permission = Permission.objects.get(codename='add_book')
-    u.user_permissions.add(permission)
-    permission = Permission.objects.get(codename='change_book')
-    u.user_permissions.add(permission)
-    permission = Permission.objects.get(codename='delete_book')
-    u.user_permissions.add(permission)
-    permission = Permission.objects.get(codename='can_mark_returned')
-    u.user_permissions.add(permission)
+    try:
+        permission = Permission.objects.get(codename='add_book')
+        u.user_permissions.add(permission)
+        permission = Permission.objects.get(codename='change_book')
+        u.user_permissions.add(permission)
+        permission = Permission.objects.get(codename='delete_book')
+        u.user_permissions.add(permission)
+        permission = Permission.objects.get(codename='can_mark_returned')
+        u.user_permissions.add(permission)
+    except Permission.DoesNotExist:
+        warnings.warn(
+            """Permissions are defined later. For now, some or all of these assignments are omitted."""
+        )
     u.save()
     bi = BookInstance.objects.filter(book__title='The Shining').first()
     bi.borrower = u
