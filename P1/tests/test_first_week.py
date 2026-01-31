@@ -5,6 +5,7 @@ EPS-UAM 2026
 """
 
 import sys
+import os
 from django.test import TestCase
 
 from catalog.models import Book, BookInstance, Language, Genre, Author
