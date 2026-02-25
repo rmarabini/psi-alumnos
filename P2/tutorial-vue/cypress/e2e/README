@@ -7,7 +7,7 @@ Para ejecutar los test debes tener en cuenta las siguientes consideraciones:
 
   e2e: {
     ...
-    baseUrl: 'http://localhost:5173',
+    baseUrl: 'http://localhost:3000',
     //baseUrl: 'https://song-frontend-shl2.onrender.com',
   },
 
