@@ -22,13 +22,15 @@ context('Delete persona', () => {
 
 
     it('Delete persona', () => {
+      cy.wait(2000)
       cy.get("table").find("tr").its('length').then(intialLength => {
 
-        cy.log('Initial len', intialLength)
-        // Code that uses initialLength is nested inside `.then()`
+      cy.log('Initial len', intialLength)
+      // Code that uses initialLength is nested inside `.then()`
 
-        cy.get('table').contains('tr', 'Paco_delete').find('[data-cy=delete-button]').click()
-        cy.get("table").find("tr").should("have.length", intialLength - 1);
+      cy.wait(2000)
+      cy.get('table').contains('tr', 'Paco_delete').find('[data-cy=delete-button]').click()
+      cy.get("table").find("tr").should("have.length", intialLength - 1);
 
       })
 

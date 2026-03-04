@@ -32,7 +32,7 @@ context('Edit persona', () => {
 
 
     it('Edit persona + save', () => {
-
+      cy.wait(2000)
       cy.get("table").find("tr").its('length').then(intialLength => {
 
         cy.log('Initial len: ', intialLength)
@@ -41,8 +41,6 @@ context('Edit persona', () => {
         cy.get('table').get('[data-cy=save-button]').click()
         cy.wait(2000)
         cy.get('table').contains('tr', 'Paco1234777')
-
-
         cy.get("table").find("tr").should("have.length", intialLength);
 
       })
@@ -50,7 +48,7 @@ context('Edit persona', () => {
     })
 
     it('Edit persona + cancel', () => {
-
+      cy.wait(2000)
       cy.get("table").find("tr").its('length').then(intialLength => {
 
         cy.log('Initial len: ', intialLength)
