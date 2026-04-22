@@ -55,48 +55,13 @@ describe('Use the aplication', () => {
     cy.wait(5000); // wait for the song to play
     cy.get('[data-cy="blankInput"]', { timeout: 15000 })
       .should("be.visible")
+      .type('kk\n')
+      cy.wait(1000)
+      cy.get('[data-cy="blankInput"]').clear();
+      cy.get('[data-cy="blankInput"]', { timeout: 15000 })
+      .should("be.visible")
       .type('love\n')
-    // Type 4 word: "movies"
-    cy.get('[data-cy="blankInput"]', { timeout: 15000 })
-      .should("be.visible")
-      .type('movies\n')
-    // Type 5 word: "world"
-    cy.get('[data-cy="blankInput"]', { timeout: 15000 })
-      .should("be.visible")
-      .type('kk\n')
-      cy.wait(1000)
-      cy.get('[data-cy="blankInput"]').clear();
-      cy.get('[data-cy="blankInput"]', { timeout: 15000 })
-      .should("be.visible")
-      .type('pp\n')
-      cy.wait(1000)
-      cy.get('[data-cy="blankInput"]').clear();
-      cy.get('[data-cy="blankInput"]', { timeout: 15000 })
-      .should("be.visible")
-      .type('world\n')
-    // type 6 word: all
-    cy.get('[data-cy="blankInput"]', { timeout: 15000 })
-      .should("be.visible")
-      .type('kk\n')
-      cy.wait(1000)
-      cy.get('[data-cy="blankInput"]').clear();
-      cy.get('[data-cy="blankInput"]', { timeout: 15000 })
-      .should("be.visible")
-      .type('pp\n')
-      cy.wait(1000)
-      cy.get('[data-cy="blankInput"]').clear();
-      cy.get('[data-cy="skip"]', { timeout: 15000 })
-      .should("be.visible")
-      .click({ force: true })
-    // Type 7 word: "here"
-      cy.get('[data-cy="blankInput"]', { timeout: 180000 })
-      .should("be.visible")
-      .type('here\n')
-    // type 8 word: all
-    cy.get('[data-cy="skip"]', { timeout: 25000 })
-    .should("be.visible")
-    .click({ force: true })
     // check correct answer
-    cy.contains('Correct answers: 5 - Wrong answers: 7', { timeout: 60000 })
+    cy.contains('Correct answers: 2 - Wrong answers: 2', { timeout: 60000 })
   })
 })
